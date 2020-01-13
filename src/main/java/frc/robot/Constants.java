@@ -16,4 +16,45 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class DriveConstants {
+        public static final int kLeftMaster = 0;
+        public static final int kLeftSlave = 1;
+        public static final int kRightMaster = 2;
+        public static final int kRightSlave = 3;
+
+        public static final int kVoltageCompLevel = 11;
+        
+        public static final int kEncoderCPR = 4096;
+        public static final double kWheelDiameterInches = 6;
+        public static final double kEncoderDistancePerPulse =
+            // Assumes the encoders are directly mounted on the wheel shafts
+            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+      }
+    
+      public static final class IntakeConstants {
+        public static final int kIntakeSolenoidForward = 0;
+        public static final int kIntakeSolenoidReverse = 1;
+        public static final int kIntakeMotor = 4;
+        public static final int[] kIntakeSolenoidPorts = new int[]{0, 1};
+        public static final int runTime = 15;
+      }
+
+      public static final class ShooterConstants {
+        public static final int kShooterMotor = 5;
+      }
+
+      public static final class BallStorageConstants {
+        public static final int kStorageMotorMaster = 6;
+        public static final int kStorageMotorSlave = 7;   
+      }
+    
+      public static final class AutoConstants {
+        public static final double kAutoDriveDistanceInches = 60;
+        public static final double kAutoBackupDistanceInches = 20;
+        public static final double kAutoDriveSpeed = 0.5;
+      }
+    
+      public static final class OIConstants {
+        public static final int kDriverControllerPort = 0;
+      }    
 }
