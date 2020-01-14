@@ -9,36 +9,44 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants.DriveConstants;
 
 public class Drivetrain extends SubsystemBase {
-  //left side motors
+  // left side motors
   private final WPI_TalonFX leftMaster = new WPI_TalonFX(DriveConstants.kLeftMaster);
   private final TalonFX leftSlave = new TalonFX(DriveConstants.kLeftSlave);
-  //right side motors
+  private final TalonFXSensorCollection leftSensors = new TalonFXSensorCollection(leftSlave); //need in order to get encoder values from talon fx
+  // right side motors
   private final WPI_TalonFX rightMaster = new WPI_TalonFX(DriveConstants.kRightMaster);
   private final TalonFX rightSlave = new TalonFX(DriveConstants.kRightSlave);
+  private final TalonFXSensorCollection rightSensors = new TalonFXSensorCollection(rightSlave); //need in order to get encoder values from talon fx
 
-  //the drivebase 
+  // the drivebase
   DifferentialDrive m_drive = new DifferentialDrive(leftMaster, rightMaster);
 
   public Drivetrain() {
-    //only need to talk to one motor per side
+    // only need to talk to one motor per side
     leftSlave.follow(leftMaster);
-    rightSlave.follow(rightMaster); 
+    rightSlave.follow(rightMaster);
 
-    //battery brownouts bad
+    // battery brownouts bad
     leftMaster.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
-    leftMaster.enableVoltageCompensation(true); 
+    leftMaster.enableVoltageCompensation(true);
     leftSlave.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
-    leftSlave.enableVoltageCompensation(true); 
+    leftSlave.enableVoltageCompensation(true);
     rightMaster.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
-    rightMaster.enableVoltageCompensation(true); 
+    rightMaster.enableVoltageCompensation(true);
     rightSlave.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     rightSlave.enableVoltageCompensation(true);
+
+    rightSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
+    leftSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
   }
 
   public void arcadeDrive(double fwd, double rot) {
@@ -50,8 +58,8 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return the left drive encoder
    */
-  public Encoder getLeftEncoder() {
-    return null;
+  public double getLeftEncoder() {
+    return leftSensors.getIntegratedSensorPosition();
   }
 
   /**
@@ -59,9 +67,20 @@ public class Drivetrain extends SubsystemBase {
    *
    * @return the right drive encoder
    */
-  public Encoder getRightEncoder() {
-    return null;
+  public double getRightEncoder() {
+    return rightSensors.getIntegratedSensorPosition();
   }
+
+
+  public void resetEncoders() {
+    leftSensors.setIntegratedSensorPosition(0,0); //resets encoders and doesn't check if it's done properly
+    rightSensors.setIntegratedSensorPosition(0,0);
+  }
+
+  public double getAverageEncoderDistance() {
+    return ((getLeftEncoder() + getRightEncoder()) / 2.0);
+  }
+
 
   @Override
   public void periodic() {

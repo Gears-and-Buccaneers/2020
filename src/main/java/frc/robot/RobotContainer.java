@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -82,11 +83,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Pop intake out when the 'A' button is pressed.
     new JoystickButton(m_driverController, Button.kA.value)
-        .whenPressed(new InstantCommand(m_intake::open, m_intake)
-        .andThen(new InstantCommand(m_intake::runNow, m_intake), new WaitCommand(IntakeConstants.runTime).andThen(() -> {
-          m_intake.retract();
-          m_intake.stopRunning();
-        })));
+    .whenPressed(new SequentialCommandGroup(
+        new InstantCommand(m_intake::open, m_intake),
+        new InstantCommand(m_intake::runNow, m_intake)));
+    //close intake when 'b' is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+    .whenPressed(new SequentialCommandGroup(
+      new InstantCommand(m_intake::retract, m_intake),
+      new InstantCommand(m_intake::stopRunning, m_intake)));
   }
 
 
