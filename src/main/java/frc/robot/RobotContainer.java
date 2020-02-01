@@ -96,7 +96,16 @@ public class RobotContainer {
     //   new InstantCommand(m_intake::stopRunning, m_intake)));
 
     //shoot balls while the x is held
-    new JoystickButton(m_driverController, Button.kX.value).whileHeld(new InstantCommand(m_shooter::runShooterPID, m_shooter));
+    new JoystickButton(m_driverController, Button.kX.value).whileHeld(
+      new StartEndCommand(
+        // Start shooting at the start of the command
+        () -> m_shooter.runShooterPID(),
+        // Stop shooting at the end of the command
+        () -> m_shooter.stopShooter(),
+        // Requires the shooter subsystem
+        m_shooter
+      )
+    );
   }
 
 

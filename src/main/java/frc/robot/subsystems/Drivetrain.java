@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
     leftSlave.follow(leftMaster);
     rightSlave.follow(rightMaster);
 
-    // battery brownouts bad
+    // all of this is to prevent battery brownouts
     leftMaster.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     leftMaster.enableVoltageCompensation(true);
     leftMaster.configOpenloopRamp(DriveConstants.kRampCoefficient);
@@ -74,6 +74,10 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
+  }
+
+  public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){
+    
   }
 
 

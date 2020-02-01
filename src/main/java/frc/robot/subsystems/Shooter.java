@@ -67,4 +67,8 @@ public class Shooter extends SubsystemBase {
   public void runShooterPID(){
     m_ShooterMaster.set(ControlMode.Velocity, ShooterConstants.targetVelocity_UnitsPer100ms);
   }
+
+  public void stopShooter(){
+    m_ShooterMaster.set(ControlMode.PercentOutput, 0);
+  }
 }
