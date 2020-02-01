@@ -26,6 +26,7 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.commands.ComplexAutoCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -39,6 +40,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   //private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -92,6 +94,9 @@ public class RobotContainer {
     // .whenPressed(new SequentialCommandGroup(
     //   new InstantCommand(m_intake::retract, m_intake),
     //   new InstantCommand(m_intake::stopRunning, m_intake)));
+
+    //shoot balls while the x is held
+    new JoystickButton(m_driverController, Button.kX.value).whileHeld(new InstantCommand(m_shooter::runShooterPID, m_shooter));
   }
 
 
