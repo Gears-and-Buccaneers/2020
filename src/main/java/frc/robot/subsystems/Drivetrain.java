@@ -10,9 +10,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
+<<<<<<< HEAD
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+=======
+>>>>>>> 96fd54278c346852bf9ce393217397def2df991c
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,12 +55,20 @@ public class Drivetrain extends SubsystemBase {
     // battery brownouts bad
     leftMaster.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     leftMaster.enableVoltageCompensation(true);
+    leftMaster.configOpenloopRamp(DriveConstants.kRampCoefficient);
+    leftMaster.setNeutralMode(NeutralMode.Brake);
     leftSlave.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     leftSlave.enableVoltageCompensation(true);
+    leftSlave.configOpenloopRamp(DriveConstants.kRampCoefficient);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
     rightMaster.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     rightMaster.enableVoltageCompensation(true);
+    rightMaster.configOpenloopRamp(DriveConstants.kRampCoefficient);    
+    rightMaster.setNeutralMode(NeutralMode.Brake);
     rightSlave.configVoltageCompSaturation(DriveConstants.kVoltageCompLevel);
     rightSlave.enableVoltageCompensation(true);
+    rightSlave.configOpenloopRamp(DriveConstants.kRampCoefficient);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
 
     rightSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
     leftSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
