@@ -34,18 +34,19 @@ public final class Constants {
       public static final class IntakeConstants {
         public static final int kIntakeSolenoidForward = 0;
         public static final int kIntakeSolenoidReverse = 1;
-        public static final int kIntakeMotor = 4;
+        public static final int kIntakeMotor = 10;
         public static final int[] kIntakeSolenoidPorts = new int[]{0, 1};
         public static final int runTime = 15;
       }
 
       public static final class ShooterConstants {
-        public static final int kShooterMotor = 5;
+        public static final int kShooterMaster = 20;
+        public static final int kShooterSlave = 21;
       }
 
       public static final class BallStorageConstants {
-        public static final int kStorageMotorMaster = 6;
-        public static final int kStorageMotorSlave = 7;   
+        public static final int kStorageMotorMaster = 30;
+        public static final int kStorageMotorSlave = 31;   
       }
     
       public static final class AutoConstants {

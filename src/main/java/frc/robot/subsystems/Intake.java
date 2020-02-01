@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-  private static final WPI_TalonSRX m_intake = new WPI_TalonSRX(IntakeConstants.kIntakeMotor);
+  private static final WPI_TalonSRX m_intakeMotor = new WPI_TalonSRX(IntakeConstants.kIntakeMotor);
   private static final DoubleSolenoid m_intakeSol = new DoubleSolenoid(IntakeConstants.kIntakeSolenoidForward, IntakeConstants.kIntakeSolenoidReverse);
   
   /**
@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void runNow(){
-    m_intake.set(ControlMode.PercentOutput, 0.5);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void open(){
@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void stopRunning(){
-    m_intake.set(ControlMode.PercentOutput, 0);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
