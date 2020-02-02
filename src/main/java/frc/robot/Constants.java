@@ -80,7 +80,7 @@ public final class Constants {
         public static final int kPIDLoopIdx = 0; //get the primary PID loop
         public static final int kSlotIdx = 0; //Says what PID slot is used
 
-        public static final double kP = 0.25; //proportional gain
+        public static final double kP = 0.25; //proportional gain TODO: Tune these values!!!
         public static final double kI = 0.001; //integral gain
         public static final double kD = 20; //derivitive gain
         public static final double kF = 1023.0/7200.0; //FeedForward gain, so 1023 is 100% Talon and 7200 is velocity units from encoder in 100ms
