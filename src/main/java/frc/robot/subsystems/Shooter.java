@@ -54,9 +54,6 @@ public class Shooter extends SubsystemBase {
 		m_ShooterMaster.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
 		m_ShooterMaster.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
 		m_ShooterMaster.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
-    //Velocity PID loop for shooter (trying to maintain constant rpm)
-
-
   }
 
   @Override
