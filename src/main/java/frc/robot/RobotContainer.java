@@ -9,7 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj2.command;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +26,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Limelight;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -39,8 +40,11 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
-  //private final Intake m_intake = new Intake();
+  private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
+  private final Turret m_turret = new Turret();
+
+  private final Limelight m_limelight = new Limelight();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -65,6 +69,15 @@ public class RobotContainer {
             .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
 
+    m_limelight.setDefaultCommand(
+      new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
+    );
+
+    m_turret.setDefaultCommand(
+      new RunCommand(() -> m_turret.turnToAngle(m_limelight.getX()) //sets the turret angle to the limelight 
+      )
+    );
+
     // Add commands to the autonomous command chooser
     //m_chooser.addOption("Simple Auto", m_simpleAuto);
     //m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -84,16 +97,16 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // // Pop intake out when the 'A' button is pressed.
-    // new JoystickButton(m_driverController, Button.kA.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //     new InstantCommand(m_intake::open, m_intake),
-    //     new InstantCommand(m_intake::runNow, m_intake)));
-    // //close intake when 'b' is pressed
-    // new JoystickButton(m_driverController, Button.kB.value)
-    // .whenPressed(new SequentialCommandGroup(
-    //   new InstantCommand(m_intake::retract, m_intake),
-    //   new InstantCommand(m_intake::stopRunning, m_intake)));
+    // Pop intake out when the 'A' button is pressed.
+    new JoystickButton(m_driverController, Button.kA.value)
+      .whenPressed(new SequentialCommandGroup(
+          new InstantCommand(m_intake::open, m_intake),
+          new InstantCommand(m_intake::runNow, m_intake)));
+    //close intake when 'b' is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+      .whenPressed(new SequentialCommandGroup(
+        new InstantCommand(m_intake::retract, m_intake),
+        new InstantCommand(m_intake::stopRunning, m_intake)));
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
