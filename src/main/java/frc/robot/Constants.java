@@ -88,6 +88,13 @@ public final class Constants {
         public static final int kCuriseVelocity = 4663; //fastest the motion magic will let the motor cruise at (in units per 100ms of encoder)
         public static final int kAccelerationVelocity = 9326; //this means that it will take 1/2 a second to accelerate to cruise velocity
       }
+
+      public static final class CANIfierConstants {
+        public static final int kCanifier1 = 50;
+        public static final int kCanifier2 = 51;
+
+        public static final int kTimeoutMs = 30;
+      }
     
       public static final class AutoConstants {
         public static final double kAutoDriveDistanceInches = 60;

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class Drivetrain extends SubsystemBase {
   // left side motors
@@ -77,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){
-    
+
   }
 
 
