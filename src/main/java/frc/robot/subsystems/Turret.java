@@ -8,7 +8,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.TurretConstants;
-import io.github.oblarg.oblog.annotations.Config;
+//import io.github.oblarg.oblog.annotations.Config;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -66,7 +66,7 @@ public class Turret extends SubsystemBase {
     m_TurretMotor.set(ControlMode.MotionMagic, 0); //moves the turret to 0 degrees
   }
 
-  @Config
+  //@Config
   public void turnToAngle(double angle){
     m_TurretMotor.set(ControlMode.MotionMagic, angle); //move the turret to the desired angle
   }
