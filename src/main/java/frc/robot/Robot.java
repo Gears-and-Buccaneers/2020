@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import io.github.oblarg.oblog.Logger;
+//import io.github.oblarg.oblog.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
         // this is for logging to the dashboard
     // The first argument is the root container
     // The second argument is whether logging and config should be given separate tabs
-    Logger.configureLoggingAndConfig(this, false);
+    //Logger.configureLoggingAndConfig(this, false);
   }
 
   /**
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    Logger.updateEntries();
+    //Logger.updateEntries();
   }
 
   /**
