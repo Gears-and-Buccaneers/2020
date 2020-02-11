@@ -22,6 +22,8 @@ public final class Constants {
         public static final int kRightMaster = 2;
         public static final int kRightSlave = 3;
 
+        public static final boolean kGyroReversed = true;
+
         public static final int kVoltageCompLevel = 11; //Lowest Voltage Motors should get to in Volts from PDB
 
         public static final int kEncoderCPR = 2048; //counts per revolution for enocder math
