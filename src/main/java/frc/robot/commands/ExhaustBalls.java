@@ -10,11 +10,13 @@ package frc.robot.commands;
 import frc.robot.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ExhaustBalls extends CommandBase {
   private static Storage m_storage;
+
+  double timeInitial;
 
   public ExhaustBalls(Storage subsystem) {
     m_storage = subsystem;
@@ -24,13 +26,14 @@ public class ExhaustBalls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timeInitial = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if
-    m_storage.run();
+    if(Timer.getFPGATimestamp() - timeInitial < 0.3){
+      m_storage.run();}
     new WaitCommand(1);
   }
 

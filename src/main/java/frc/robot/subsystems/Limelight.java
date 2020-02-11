@@ -36,12 +36,16 @@ public class Limelight extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double getX(){
+  public double getTX(){
     return tx.getDouble(0.0);
   }
 
-  public double getY(){
+  public double getTY(){
     return ty.getDouble(0.0);
+  }
+
+  public double getTA(){
+    return ta.getDouble(0.0);
   }
 
   public boolean isTargetAvalible(){
@@ -57,8 +61,8 @@ public class Limelight extends SubsystemBase {
   }
 
   public void update(boolean isEnabled) {
-    SmartDashboard.putNumber("limelight x", getX());
-    SmartDashboard.putNumber("limelight y", getY());
+    SmartDashboard.putNumber("limelight x", getTX());
+    SmartDashboard.putNumber("limelight y", getTY());
     SmartDashboard.putBoolean("limelight has target", isTargetAvalible());
     SmartDashboard.putString("limelight mode", getVisionMode());
   }
