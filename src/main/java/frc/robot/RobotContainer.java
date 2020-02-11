@@ -29,6 +29,7 @@ import frc.robot.subsystems.Limelight;
 
 //import frc.robot.commands.ComplexAutoCommand;
 import frc.robot.commands.IndexBalls;
+import frc.robot.commands.ExhaustBalls;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -112,13 +113,9 @@ public class RobotContainer {
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
-      new StartEndCommand(
-        // Start shooting at the start of the command
-        () -> m_shooter.runShooterPID(),
-        // Stop shooting at the end of the command
-        () -> m_shooter.stopShooter(),
-        // Requires the shooter subsystem
-        m_shooter
+      new SequentialCommandGroup(
+          new RunCommand(m_shooter::runShooterPID, m_shooter),
+          new ExhaustBalls(m_storage, m_shooter)
       )
     );
   }

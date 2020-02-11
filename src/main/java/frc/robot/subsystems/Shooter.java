@@ -68,4 +68,8 @@ public class Shooter extends SubsystemBase {
   public void stopShooter(){
     m_ShooterMaster.set(ControlMode.PercentOutput, 0);
   }
+
+  public boolean isShooterAtSpeed(){
+    return (m_ShooterMaster.getSelectedSensorVelocity() > 4000);
+  }
 }

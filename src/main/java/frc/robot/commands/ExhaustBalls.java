@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -15,12 +16,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ExhaustBalls extends CommandBase {
   private static Storage m_storage;
+  private static Shooter m_shooter;
 
   double timeInitial;
 
-  public ExhaustBalls(Storage subsystem) {
+  public ExhaustBalls(Storage subsystem, Shooter shooter) {
     m_storage = subsystem;
-    addRequirements(m_storage);
+    m_shooter = shooter;
+    addRequirements(m_storage, m_shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -32,9 +35,21 @@ public class ExhaustBalls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Timer.getFPGATimestamp() - timeInitial < 0.3){
-      m_storage.run();}
-    new WaitCommand(1);
+    if(m_shooter.isShooterAtSpeed()){
+      for(int i = m_storage.getNumBalls(); i > 0; i--){
+        while(Timer.getFPGATimestamp() - timeInitial < 0.3){
+          m_storage.run();  
+        }
+        m_storage.stop();
+        timeInitial = Timer.getFPGATimestamp();
+        while(Timer.getFPGATimestamp() - timeInitial < 0.3){
+          m_storage.stop();  
+        }
+      }  
+    }
+    else {
+      m_storage.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.
