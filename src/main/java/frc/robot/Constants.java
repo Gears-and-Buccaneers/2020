@@ -44,6 +44,12 @@ public final class Constants {
         public static final int runTime = 15;
       }
 
+      public static final class ClimberConstants {
+        public static final int kClimberWinch = 40;
+        public static final int kClimberHook = 41;
+        public static final int kClimberElevator = 42;
+      }
+
       public static final class ShooterConstants {
         public static final int kShooterMaster = 20; //CAN IDs for shooter SRXs
         public static final int kShooterSlave = 21;
@@ -70,23 +76,12 @@ public final class Constants {
 
       public static final class BallStorageConstants {
         public static final int kStorageMotorMaster = 30;
-        public static final int kStorageMotorSlave = 31;   
-      }
+        public static final int kStorageMotorSlave = 31;
+        
+        public static final int entranceSensor = 0;
+        public static final int exitSensor = 1;
 
-      public static final class TurretConstants {
-        public static final int kTurretMotor = 40;
-
-        public static final int kTimeoutMs = 30; //to make sure config works
-        public static final int kPIDLoopIdx = 0; //get the primary PID loop
-        public static final int kSlotIdx = 0; //Says what PID slot is used
-
-        public static final double kP = 0.25; //proportional gain TODO: Tune these values!!!
-        public static final double kI = 0.001; //integral gain
-        public static final double kD = 20; //derivitive gain
-        public static final double kF = 1023.0/7200.0; //FeedForward gain, so 1023 is 100% Talon and 7200 is velocity units from encoder in 100ms
-
-        public static final int kCuriseVelocity = 4663; //fastest the motion magic will let the motor cruise at (in units per 100ms of encoder)
-        public static final int kAccelerationVelocity = 9326; //this means that it will take 1/2 a second to accelerate to cruise velocity
+        public static final double minRecognizeVoltage = 5;
       }
 
       public static final class CANIfierConstants {

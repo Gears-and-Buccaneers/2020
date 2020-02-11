@@ -21,12 +21,14 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.DriveConstants;
-//import frc.robot.commands.ComplexAutoCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Limelight;
+
+//import frc.robot.commands.ComplexAutoCommand;
+import frc.robot.commands.IndexBalls;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -41,7 +43,7 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
-  private final Turret m_turret = new Turret();
+  private final Storage m_storage = new Storage();
 
   private final Limelight m_limelight = new Limelight();
 
@@ -72,17 +74,21 @@ public class RobotContainer {
       new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
     );
 
-    m_turret.setDefaultCommand(
-      new RunCommand(() -> m_turret.turnToAngle(m_limelight.getX()) //sets the turret angle to the limelight 
-      )
+    m_storage.setDefaultCommand(
+      new InstantCommand(() -> m_storage.stop())
     );
+
+    m_intake.setDefaultCommand(
+      new SequentialCommandGroup(
+        new InstantCommand(m_intake::retract, m_intake),
+        new InstantCommand(m_intake::stopRunning, m_intake)
+        )
+    );
+
 
     // Add commands to the autonomous command chooser
     //m_chooser.addOption("Simple Auto", m_simpleAuto);
     //m_chooser.addOption("Complex Auto", m_complexAuto);
-
-    //intake default
-    //m_intake.setDefaultCommand();
 
     // Put the chooser on the dashboard
     Shuffleboard.getTab("Autonomous").add(m_chooser);
@@ -96,16 +102,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Pop intake out when the 'A' button is pressed.
+    // Pop intake out when the 'A' button is HELD.
     new JoystickButton(m_driverController, Button.kA.value)
-      .whenPressed(new SequentialCommandGroup(
+      .whileHeld(new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
-          new InstantCommand(m_intake::runNow, m_intake)));
-    //close intake when 'b' is pressed
-    new JoystickButton(m_driverController, Button.kB.value)
-      .whenPressed(new SequentialCommandGroup(
-        new InstantCommand(m_intake::retract, m_intake),
-        new InstantCommand(m_intake::stopRunning, m_intake)));
+          new InstantCommand(m_intake::runNow, m_intake),
+          new InstantCommand(m_storage::run, m_storage).withTimeout(0.5),
+          new IndexBalls(m_storage)));
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
