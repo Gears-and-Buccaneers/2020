@@ -53,6 +53,8 @@ public final class Constants {
         public static final double kvVoltSecondsPerMeter = 1.98;
         public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
+        // Example value only - as above, this must be tuned for your drive!
+        public static final double kPDriveVel = 8.5;
       }
     
       public static final class IntakeConstants {
@@ -67,6 +69,8 @@ public final class Constants {
         public static final int kClimberWinch = 40;
         public static final int kClimberHook = 41;
         public static final int kClimberElevator = 42;
+
+        public static final int kExtendTimeInSeconds = 2;
       }
 
       public static final class ShooterConstants {

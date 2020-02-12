@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -36,6 +35,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
 
 //import frc.robot.commands.ComplexAutoCommand;
@@ -58,6 +58,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Storage m_storage = new Storage();
+  private final Climber m_climber = new Climber();
 
   private final Limelight m_limelight = new Limelight();
 
@@ -83,6 +84,13 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain
             .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
+    //make the bumpers control the bar side to side motors.
+    m_climber.setDefaultCommand(
+      new RunCommand(
+            () -> m_climber
+        .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
+    ));
+
 
     m_limelight.setDefaultCommand(
       new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
@@ -122,7 +130,9 @@ public class RobotContainer {
           new InstantCommand(m_intake::open, m_intake),
           new InstantCommand(m_intake::runNow, m_intake),
           new InstantCommand(m_storage::run, m_storage).withTimeout(0.5),
-          new IndexBalls(m_storage)));
+          new IndexBalls(m_storage)
+      )
+    );
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
@@ -131,6 +141,10 @@ public class RobotContainer {
           new ExhaustBalls(m_storage, m_shooter)
       )
     );
+
+    //extend climber when left bumper is pressed
+    new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
+      new InstantCommand(m_climber::extendClimber, m_climber));
   }
 
 
@@ -190,6 +204,6 @@ public class RobotContainer {
     );
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
+    return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
   }
 }
