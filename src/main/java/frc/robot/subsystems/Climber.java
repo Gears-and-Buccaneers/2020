@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants.ClimberConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -31,6 +32,9 @@ public class Climber extends SubsystemBase {
 
     winchMotor.configFactoryDefault(); //clears all previous settings
     hookMotor.configFactoryDefault();
+
+    winchMotor.setNeutralMode(NeutralMode.Brake); //makes sure the motors attempt to stay in the same place once stopped.
+    hookMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   /**
