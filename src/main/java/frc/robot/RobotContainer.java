@@ -28,12 +28,12 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.WheelSpinner;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
@@ -41,6 +41,7 @@ import frc.robot.subsystems.Limelight;
 //import frc.robot.commands.ComplexAutoCommand;
 import frc.robot.commands.IndexBalls;
 import frc.robot.commands.ExhaustBalls;
+import frc.robot.commands.Stage1Spin;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
@@ -59,6 +60,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Storage m_storage = new Storage();
   private final Climber m_climber = new Climber();
+  private final WheelSpinner m_spinner = new WheelSpinner();
 
   private final Limelight m_limelight = new Limelight();
 
@@ -140,6 +142,11 @@ public class RobotContainer {
           new RunCommand(m_shooter::runShooterPID, m_shooter),
           new ExhaustBalls(m_storage, m_shooter)
       )
+    );
+
+    //open wheel spinner and run while 'B' is HELD
+    new JoystickButton(m_driverController, Button.kB.value).whileHeld(
+        new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
     );
 
     //extend climber when left bumper is pressed

@@ -71,6 +71,8 @@ public final class Constants {
         public static final int kClimberElevator = 42;
 
         public static final int kExtendTimeInSeconds = 2;
+
+        public static final int[] kClimberSolenoidPorts = new int[]{2, 3};
       }
 
       public static final class ShooterConstants {
@@ -112,6 +114,14 @@ public final class Constants {
         public static final int kCanifier2 = 51;
 
         public static final int kTimeoutMs = 30;
+      }
+
+      public static final class WheelSpinnerConstants {
+        public static final int kWheelSpinnerMotor  = 70;
+
+        public static final double wheelSpinnerMotorSpeed = 0.7;
+
+        public static final int[] kSpinnerSolenoidPorts = new int[]{4, 5};
       }
     
       public static final class AutoConstants {
