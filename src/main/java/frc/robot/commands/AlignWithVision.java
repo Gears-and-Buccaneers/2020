@@ -12,15 +12,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
+import frc.robot.Constants.ShooterConstants;
 
 public class AlignWithVision extends CommandBase {
   private static Drivetrain m_drivetrain = new Drivetrain();
   private static Limelight m_limelight = new Limelight();
 
-  // Constants: tune driving and steering control constants
-  private double m_steeringKP = 0.055;
-  private double m_targetArea = 2.1;
-  private double m_driveKP = 0.80;
+  private boolean m_LimelightHasValidTarget = false;
+  private double m_LimelightDriveCommand = 0.0;
+  private double m_LimelightSteerCommand = 0.0;
+
+  // These numbers must be tuned for your Robot!  Be careful!
+  private double STEER_K = ShooterConstants.STEER_K;                    // how hard to turn toward the target
+  private double DRIVE_K = ShooterConstants.DRIVE_K;                    // how hard to drive fwd toward the target
+  private double DESIRED_TARGET_AREA = ShooterConstants.DESIRED_TARGET_AREA;        // Area of the target when the robot reaches the wall
+  private double MAX_DRIVE = ShooterConstants.MAX_DRIVE;                   // Simple speed limit so we don't drive too fast
+  
+
 
   /**
    * Creates a new AlignWithVision.
@@ -32,53 +40,74 @@ public class AlignWithVision extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain, m_limelight);
 
-    SmartDashboard.putNumber("Steering KP", 0.055);  
-    SmartDashboard.putNumber("min TA", 2.1);
-    SmartDashboard.putNumber("Driving KP", 0.80);
+    SmartDashboard.putNumber("Steering KP", STEER_K);  
+    SmartDashboard.putNumber("Desired TA", DESIRED_TARGET_AREA);
+    SmartDashboard.putNumber("Driving KP", DRIVE_K);
+    SmartDashboard.putNumber("Max speed", MAX_DRIVE);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_steeringKP = SmartDashboard.getNumber("Steering KP", 0.0);
-    m_targetArea = SmartDashboard.getNumber("min TA", 0.0);
-    m_driveKP = SmartDashboard.getNumber("Driving KP", 0.0);
+    STEER_K = SmartDashboard.getNumber("Steering KP", 0.0);
+    DESIRED_TARGET_AREA = SmartDashboard.getNumber("min TA", 0.0);
+    DRIVE_K = SmartDashboard.getNumber("Driving KP", 0.0);
+    MAX_DRIVE = SmartDashboard.getNumber("Max Speed", 0.0);
 
-    SmartDashboard.putNumber("Left", 10000);
-    SmartDashboard.putNumber("Right", 10000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double right = m_limelight.getTX()*m_steeringKP; // Right Y
-    double left  = (m_targetArea-m_limelight.getTA())*m_driveKP; // Left X
-    SmartDashboard.putNumber("target area", m_limelight.getTA());
-
-    // m_DriveTrain.teleop_drive(left, right); // Drive until the target is at desired distance
-    SmartDashboard.putNumber("Left", left);
-    SmartDashboard.putNumber("Right", right);
-    if (m_limelight.isTargetAvalible()) {
-      if (m_limelight.getTA() >= m_targetArea) {
-        left = 0;
-        right = 0;
-      }
-    } else {
-     left = 0;
-     right = 0;
+    if (m_LimelightHasValidTarget) {
+        m_drivetrain.arcadeDrive(m_LimelightDriveCommand,m_LimelightSteerCommand);
     }
-
-    m_drivetrain.arcadeDrive(left, right);
+    else {
+      m_drivetrain.arcadeDrive(0.0,0.0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drivetrain.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public void Update_Limelight_Tracking()
+  {
+        double tv = m_limelight.getTV();
+        double tx = m_limelight.getTX();
+        double ty = m_limelight.getTY();
+        double ta = m_limelight.getTA();
+    
+        if (tv < 1.0)
+        {
+          m_LimelightHasValidTarget = false;
+          m_LimelightDriveCommand = 0.0;
+          m_LimelightSteerCommand = 0.0;
+          return;
+        }
+
+        m_LimelightHasValidTarget = true;
+
+        // Start with proportional steering
+        double steer_cmd = tx * STEER_K;
+        m_LimelightSteerCommand = steer_cmd;
+
+        // try to drive forward until the target area reaches our desired area
+        double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+
+        // don't let the robot drive too fast into the goal
+        if (drive_cmd > MAX_DRIVE)
+        {
+          drive_cmd = MAX_DRIVE;
+        }
+        m_LimelightDriveCommand = drive_cmd;
   }
 }

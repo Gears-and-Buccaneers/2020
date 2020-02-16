@@ -48,6 +48,10 @@ public class Limelight extends SubsystemBase {
     return ta.getDouble(0.0);
   }
 
+  public double getTV(){
+    return tv.getDouble(0.0);
+  }
+
   public boolean isTargetAvalible(){
     return tv.getBoolean(false);
   }
