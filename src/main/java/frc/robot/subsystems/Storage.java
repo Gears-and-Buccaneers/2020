@@ -28,7 +28,9 @@ public class Storage extends SubsystemBase {
     topMotor.configFactoryDefault();
     bottomMotor.configFactoryDefault();
 
-    bottomMotor.setInverted(true);
+    topMotor.setInverted(false);
+
+    bottomMotor.setInverted(false);
     bottomMotor.follow(topMotor);
   }
 

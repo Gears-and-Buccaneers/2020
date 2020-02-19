@@ -66,9 +66,9 @@ public final class Constants {
       }
 
       public static final class ClimberConstants {
-        public static final int kClimberWinch = 40;
-        public static final int kClimberHook = 41;
-        public static final int kClimberElevator = 42;
+        public static final int kClimberWinch = 61;
+        public static final int kClimberHook = 60;
+        public static final int kClimberElevator = 7;
 
         public static final int kExtendTimeInSeconds = 2;
 
@@ -108,7 +108,7 @@ public final class Constants {
 
       public static final class BallStorageConstants {
         public static final int kStorageMotorMaster = 30;
-        public static final int kStorageMotorSlave = 31;
+        public static final int kStorageMotorSlave = 7;
         
         public static final int entranceSensor = 0;
         public static final int exitSensor = 1;
@@ -124,7 +124,7 @@ public final class Constants {
       }
 
       public static final class WheelSpinnerConstants {
-        public static final int kWheelSpinnerMotor  = 70;
+        public static final int kWheelSpinnerMotor  = 69;
 
         public static final double wheelSpinnerMotorSpeed = 0.7;
 

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -22,11 +23,15 @@ public class Intake extends SubsystemBase {
    * Creates a new Intake.
    */
   public Intake() {
+    m_intakeMotor.configFactoryDefault();
 
+    m_intakeMotor.setNeutralMode(NeutralMode.Brake);
+
+    m_intakeMotor.setInverted(true);
   }
 
   public void runNow(){
-    m_intakeMotor.set(ControlMode.PercentOutput, 0.5);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.15);
   }
 
   public void open(){

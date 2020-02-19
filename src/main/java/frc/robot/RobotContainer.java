@@ -33,7 +33,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Storage;
-import frc.robot.subsystems.WheelSpinner;
+//import frc.robot.subsystems.WheelSpinner;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
@@ -60,7 +60,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Storage m_storage = new Storage();
   private final Climber m_climber = new Climber();
-  private final WheelSpinner m_spinner = new WheelSpinner();
+  // private final WheelSpinner m_spinner = new WheelSpinner();
 
   private final Limelight m_limelight = new Limelight();
 
@@ -87,19 +87,19 @@ public class RobotContainer {
             .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
     //make the bumpers control the bar side to side motors.
-    m_climber.setDefaultCommand(
-      new RunCommand(
-            () -> m_climber
-        .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
-    ));
+    // m_climber.setDefaultCommand(
+    //   new RunCommand(
+    //         () -> m_climber
+    //     .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
+    // ));
 
 
-    m_limelight.setDefaultCommand(
-      new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
-    );
+    // m_limelight.setDefaultCommand(
+    //   new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
+    // );
 
     m_storage.setDefaultCommand(
-      new InstantCommand(() -> m_storage.stop())
+      new RunCommand(m_storage::stop, m_storage)
     );
 
     m_intake.setDefaultCommand(
@@ -131,8 +131,8 @@ public class RobotContainer {
       .whileHeld(new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
           new InstantCommand(m_intake::runNow, m_intake),
-          new InstantCommand(m_storage::run, m_storage).withTimeout(0.5),
-          new IndexBalls(m_storage)
+          new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
+          //new IndexBalls(m_storage)
       )
     );
 
@@ -144,10 +144,10 @@ public class RobotContainer {
       )
     );
 
-    //open wheel spinner and run while 'B' is HELD
-    new JoystickButton(m_driverController, Button.kB.value).whileHeld(
-        new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
-    );
+    // //open wheel spinner and run while 'B' is HELD
+    // new JoystickButton(m_driverController, Button.kB.value).whileHeld(
+    //     new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
+    // );
 
     //extend climber when left bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
