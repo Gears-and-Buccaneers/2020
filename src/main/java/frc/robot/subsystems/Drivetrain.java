@@ -107,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+    m_drive.arcadeDrive(fwd*fwd, rot*rot); // Squaring values
   }
 
   public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){

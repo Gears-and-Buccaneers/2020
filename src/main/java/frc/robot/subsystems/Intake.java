@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void runNow(){
-    m_intakeMotor.set(ControlMode.PercentOutput, 0.4);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.8);
   }
 
   public void open(){

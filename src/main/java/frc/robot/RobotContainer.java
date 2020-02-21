@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.DriveConstants;
@@ -102,6 +103,10 @@ public class RobotContainer {
       new RunCommand(m_storage::stop, m_storage)
     );
 
+    m_shooter.setDefaultCommand(
+      new RunCommand(m_shooter::stopShooter, m_shooter)
+    );
+
     m_intake.setDefaultCommand(
       new SequentialCommandGroup(
         // new InstantCommand(m_intake::retract, m_intake),
@@ -129,7 +134,7 @@ public class RobotContainer {
     // Pop intake out when the 'A' button is HELD.
     new JoystickButton(m_driverController, Button.kA.value)
       .whileHeld(new SequentialCommandGroup(
-          // new InstantCommand(m_intake::open, m_intake),
+          new InstantCommand(m_intake::open, m_intake),
           new InstantCommand(m_intake::runNow, m_intake)
           // new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
           //new IndexBalls(m_storage)
@@ -148,6 +153,8 @@ public class RobotContainer {
       )
     );
 
+
+
     // //open wheel spinner and run while 'B' is HELD
     // new JoystickButton(m_driverController, Button.kB.value).whileHeld(
     //     new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
@@ -156,6 +163,15 @@ public class RobotContainer {
     //extend climber when left bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
       new InstantCommand(m_climber::extendClimber, m_climber));
+
+
+    new POVButton(m_driverController, 0).whenPressed(
+      new RunCommand(m_storage::run, m_storage)
+    );
+
+    new POVButton(m_driverController, 180).whenPressed(
+      new InstantCommand(m_storage::stop, m_storage)
+    );
   }
 
 
