@@ -104,7 +104,7 @@ public class RobotContainer {
 
     m_intake.setDefaultCommand(
       new SequentialCommandGroup(
-        new InstantCommand(m_intake::retract, m_intake),
+        // new InstantCommand(m_intake::retract, m_intake),
         new InstantCommand(m_intake::stopRunning, m_intake)
         )
     );
@@ -129,18 +129,22 @@ public class RobotContainer {
     // Pop intake out when the 'A' button is HELD.
     new JoystickButton(m_driverController, Button.kA.value)
       .whileHeld(new SequentialCommandGroup(
-          new InstantCommand(m_intake::open, m_intake),
-          new InstantCommand(m_intake::runNow, m_intake),
-          new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
+          // new InstantCommand(m_intake::open, m_intake),
+          new InstantCommand(m_intake::runNow, m_intake)
+          // new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
           //new IndexBalls(m_storage)
       )
+    );
+
+    new JoystickButton(m_driverController, Button.kA.value).whenReleased(
+      new InstantCommand(m_intake::retract, m_intake)
     );
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
       new SequentialCommandGroup(
-          new RunCommand(m_shooter::runShooterPID, m_shooter),
-          new ExhaustBalls(m_storage, m_shooter)
+          new RunCommand(m_shooter::runOpenLoop, m_shooter)
+          //new ExhaustBalls(m_storage, m_shooter)
       )
     );
 

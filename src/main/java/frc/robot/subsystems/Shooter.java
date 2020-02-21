@@ -65,6 +65,10 @@ public class Shooter extends SubsystemBase {
     m_ShooterMaster.set(ControlMode.Velocity, ShooterConstants.targetVelocity_UnitsPer100ms);
   }
 
+  public void runOpenLoop(){
+    m_ShooterMaster.set(ControlMode.PercentOutput, .9);
+  }
+
   public void stopShooter(){
     m_ShooterMaster.set(ControlMode.PercentOutput, 0);
   }
