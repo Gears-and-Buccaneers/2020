@@ -153,6 +153,8 @@ public class RobotContainer {
       )
     );
 
+    new JoystickButton(m_driverController, Button.kBack.value).whileHeld(new RunCommand(m_drivetrain::playMusic, m_drivetrain));
+
 
 
     // //open wheel spinner and run while 'B' is HELD
