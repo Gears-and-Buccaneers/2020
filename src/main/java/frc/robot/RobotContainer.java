@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.DriveConstants;
@@ -142,6 +143,15 @@ public class RobotContainer {
           new RunCommand(m_shooter::runShooterPID, m_shooter),
           new ExhaustBalls(m_storage, m_shooter)
       )
+    );
+
+    new POVButton(m_driverController, 180).whileHeld(
+      new InstantCommand(m_storage::reverse, m_storage).andThen(
+      new InstantCommand(m_intake::reverse, m_intake))
+    );
+
+    new POVButton(m_driverController, 0).whileHeld(
+      new InstantCommand(m_storage::run, m_storage)
     );
 
     // //open wheel spinner and run while 'B' is HELD

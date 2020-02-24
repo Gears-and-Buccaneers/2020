@@ -34,6 +34,10 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.set(ControlMode.PercentOutput, 0.15);
   }
 
+  public void reverse(){
+    m_intakeMotor.set(ControlMode.PercentOutput, -0.5);
+  }
+
   public void open(){
     m_intakeSol.set(Value.kForward);
   }
