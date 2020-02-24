@@ -103,9 +103,13 @@ public class RobotContainer {
       new RunCommand(m_storage::stop, m_storage)
     );
 
+    m_shooter.setDefaultCommand(
+      new RunCommand(m_shooter::stopShooter, m_shooter)
+    );
+
     m_intake.setDefaultCommand(
       new SequentialCommandGroup(
-        new InstantCommand(m_intake::retract, m_intake),
+        // new InstantCommand(m_intake::retract, m_intake),
         new InstantCommand(m_intake::stopRunning, m_intake)
         )
     );
@@ -131,28 +135,27 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kA.value)
       .whileHeld(new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
-          new InstantCommand(m_intake::runNow, m_intake),
-          new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
+          new InstantCommand(m_intake::runNow, m_intake)
+          // new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
           //new IndexBalls(m_storage)
       )
+    );
+
+    new JoystickButton(m_driverController, Button.kA.value).whenReleased(
+      new InstantCommand(m_intake::retract, m_intake)
     );
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
       new SequentialCommandGroup(
-          new RunCommand(m_shooter::runShooterPID, m_shooter),
-          new ExhaustBalls(m_storage, m_shooter)
+          new RunCommand(m_shooter::runOpenLoop, m_shooter)
+          //new ExhaustBalls(m_storage, m_shooter)
       )
     );
 
-    new POVButton(m_driverController, 180).whileHeld(
-      new InstantCommand(m_storage::reverse, m_storage).andThen(
-      new InstantCommand(m_intake::reverse, m_intake))
-    );
+    new JoystickButton(m_driverController, Button.kBack.value).whileHeld(new RunCommand(m_drivetrain::playMusic, m_drivetrain));
 
-    new POVButton(m_driverController, 0).whileHeld(
-      new InstantCommand(m_storage::run, m_storage)
-    );
+
 
     // //open wheel spinner and run while 'B' is HELD
     // new JoystickButton(m_driverController, Button.kB.value).whileHeld(
@@ -162,6 +165,15 @@ public class RobotContainer {
     //extend climber when left bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
       new InstantCommand(m_climber::extendClimber, m_climber));
+
+
+    new POVButton(m_driverController, 0).whenPressed(
+      new RunCommand(m_storage::run, m_storage)
+    );
+
+    new POVButton(m_driverController, 180).whenPressed(
+      new InstantCommand(m_storage::stop, m_storage)
+    );
   }
 
 

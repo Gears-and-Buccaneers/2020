@@ -21,6 +21,10 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.music.Orchestra;
+
+import java.util.ArrayList;
+
 import com.analog.adis16448.frc.ADIS16448_IMU;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +46,10 @@ public class Drivetrain extends SubsystemBase {
 
   //the gyro
   private final Gyro m_gyro = new ADIS16448_IMU();
+
+  //music!
+  private Orchestra orchestra;
+  private ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
@@ -101,13 +109,22 @@ public class Drivetrain extends SubsystemBase {
     rightSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
     leftSlave.configIntegratedSensorAbsoluteRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
+    instruments.add(leftMaster);
+    instruments.add(leftSlave);
+    instruments.add(rightMaster);
+    instruments.add(rightSlave);
+
+    orchestra = new Orchestra(instruments);
+
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
+    orchestra.loadMusic("cleanup.chrp");
 
   }
 
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+    m_drive.arcadeDrive(fwd, rot, true); // Squaring values
   }
 
   public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){
@@ -117,6 +134,10 @@ public class Drivetrain extends SubsystemBase {
 
   public void log(){
     SmartDashboard.putNumber("encoder distance in inches", getAverageEncoderDistanceInInches());
+  }
+
+  public void playMusic(){
+    orchestra.play();
   }
 
 

@@ -60,14 +60,14 @@ public final class Constants {
       public static final class IntakeConstants {
         public static final int kIntakeSolenoidForward = 0; //PCM slot # for solenoid
         public static final int kIntakeSolenoidReverse = 1;
-        public static final int kIntakeMotor = 10; //CAN IDs for intake SRX
+        public static final int kIntakeMotor = 40; //CAN IDs for intake SRX
         public static final int[] kIntakeSolenoidPorts = new int[]{0, 1};
         public static final int runTime = 15;
       }
 
       public static final class ClimberConstants {
         public static final int kClimberWinch = 61;
-        public static final int kClimberHook = 60;
+        public static final int kClimberHook = 10;
         public static final int kClimberElevator = 7;
 
         public static final int kExtendTimeInSeconds = 2;
@@ -77,7 +77,7 @@ public final class Constants {
 
       public static final class ShooterConstants {
         public static final int kShooterMaster = 20; //CAN IDs for shooter SRXs
-        public static final int kShooterSlave = 21;
+        public static final int kShooterSlave = 60;
 
         //PID Velocity Loop Control constants
         public static final int kSlotIdx = 0; //Says what PID slot is used

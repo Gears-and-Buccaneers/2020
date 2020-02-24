@@ -28,10 +28,12 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.setNeutralMode(NeutralMode.Brake);
 
     m_intakeMotor.setInverted(true);
+
+    m_intakeSol.set(Value.kReverse);
   }
 
   public void runNow(){
-    m_intakeMotor.set(ControlMode.PercentOutput, 0.15);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.8);
   }
 
   public void reverse(){
