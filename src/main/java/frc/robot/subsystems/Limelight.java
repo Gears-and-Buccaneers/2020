@@ -64,7 +64,7 @@ public class Limelight extends SubsystemBase {
     return  m_table.getEntry("getpipe").getString("0");
   }
 
-  public void update(boolean isEnabled) {
+  public void update() {
     SmartDashboard.putNumber("limelight x", getTX());
     SmartDashboard.putNumber("limelight y", getTY());
     SmartDashboard.putBoolean("limelight has target", isTargetAvalible());

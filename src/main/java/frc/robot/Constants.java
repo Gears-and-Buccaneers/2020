@@ -28,7 +28,7 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final int kVoltageCompLevel = 11; //Lowest Voltage Motors should get to in Volts from PDB
+        public static final int kVoltageCompLevel = 10; //Lowest Voltage Motors should get to in Volts from PDB
 
         public static final int kEncoderCPR = 2048; //counts per revolution for enocder math
         public static final double kWheelDiameterInches = 6; //wheel diameter TODO: maybe convert to metric?
@@ -36,10 +36,10 @@ public final class Constants {
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR; // TODO: need to include gear ratio math here
 
-        public static final double kTurnCoefficient = 1; //Overall Scaling for Turning
+        public static final double kTurnCoefficient = 0.7; //Overall Scaling for Turning
         public static final double kDriveCoefficient = 1; //Overall Scaling for Forward/Reverse
 
-        public static final double kRampCoefficient = 1; //Time in seconds from 0% to 100%
+        public static final double kRampCoefficient = 0.1; //Time in seconds from 0% to 100%
 
         public static final double kTrackwidthMeters = 0.69;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);

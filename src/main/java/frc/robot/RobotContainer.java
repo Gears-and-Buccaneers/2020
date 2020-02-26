@@ -90,19 +90,24 @@ public class RobotContainer {
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
-    m_climber.setDefaultCommand(
-      new RunCommand(
-            () -> m_climber
-        .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
-    ));
+    // m_climber.setDefaultCommand(
+    //   new RunCommand(
+    //         () -> m_climber
+    //     .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
+    // ));
 
 
-    m_limelight.setDefaultCommand(
-      new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
-    );
+    // m_limelight.setDefaultCommand(
+    //   new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
+    // );
 
     m_storage.setDefaultCommand(
-      new IndexBalls(m_storage)
+      //new IndexBalls(m_storage)
+      new RunCommand(m_storage::stop, m_storage)
+    );
+
+    m_shooter.setDefaultCommand(
+      new RunCommand(m_shooter::stopShooter, m_shooter)
     );
 
     m_spinner.setDefaultCommand(
@@ -154,7 +159,8 @@ public class RobotContainer {
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
-          new ExhaustBalls(m_storage, m_shooter)
+          new InstantCommand(m_shooter::runOpenLoop, m_shooter)
+          //new ExhaustBalls(m_storage, m_shooter)
     );
 
     //push balls away while the right bumper is held

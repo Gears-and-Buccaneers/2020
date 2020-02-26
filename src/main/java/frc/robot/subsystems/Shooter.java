@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runOpenLoop(){
-    m_ShooterMaster.set(ControlMode.PercentOutput, .9);
+    m_ShooterMaster.set(ControlMode.PercentOutput, 1);
   }
 
   public void stopShooter(){

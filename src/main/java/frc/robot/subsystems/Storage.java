@@ -35,7 +35,7 @@ public class Storage extends SubsystemBase {
   }
 
   public void run(){
-    topMotor.set(ControlMode.PercentOutput, 0.5);
+    topMotor.set(ControlMode.PercentOutput, 1);
   }
 
   public void stop(){
