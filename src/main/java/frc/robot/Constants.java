@@ -60,7 +60,7 @@ public final class Constants {
       public static final class IntakeConstants {
         public static final int kIntakeSolenoidForward = 0; //PCM slot # for solenoid
         public static final int kIntakeSolenoidReverse = 1;
-        public static final int kIntakeMotor = 40; //CAN IDs for intake SRX
+        public static final int kIntakeMotor = 61; //CAN IDs for intake SRX
         public static final int[] kIntakeSolenoidPorts = new int[]{0, 1};
         public static final int runTime = 15;
       }
@@ -108,12 +108,12 @@ public final class Constants {
 
       public static final class BallStorageConstants {
         public static final int kStorageMotorMaster = 30;
-        public static final int kStorageMotorSlave = 7;
+        public static final int kStorageMotorSlave = 40;
         
         public static final int entranceSensor = 0;
         public static final int exitSensor = 1;
 
-        public static final double minRecognizeVoltage = 5;
+        public static final double minRecognizeVoltage = 1;
       }
 
       public static final class CANIfierConstants {

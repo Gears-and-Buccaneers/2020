@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -33,7 +34,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void runNow(){
-    m_intakeMotor.set(ControlMode.PercentOutput, 0.8);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.65);
+  }
+
+  public void runWithAnalog(double num){
+    m_intakeMotor.set(ControlMode.PercentOutput, num);
+    SmartDashboard.putNumber("thing", num);
   }
 
   public void open(){

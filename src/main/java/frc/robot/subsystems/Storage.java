@@ -28,14 +28,14 @@ public class Storage extends SubsystemBase {
     topMotor.configFactoryDefault();
     bottomMotor.configFactoryDefault();
 
-    topMotor.setInverted(false);
+    topMotor.setInverted(true);
 
-    bottomMotor.setInverted(false);
+    bottomMotor.setInverted(true);
     bottomMotor.follow(topMotor);
   }
 
   public void run(){
-    topMotor.set(ControlMode.PercentOutput, 1);
+    topMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void stop(){
@@ -48,7 +48,7 @@ public class Storage extends SubsystemBase {
   }
 
   public boolean isPresentOnEntry(){
-    if(entranceSensor.getVoltage() >= BallStorageConstants.minRecognizeVoltage){
+    if(entranceSensor.getVoltage() <= BallStorageConstants.minRecognizeVoltage){
       SmartDashboard.putNumber("number of balls in storage", numBalls++);
       return true;
     }

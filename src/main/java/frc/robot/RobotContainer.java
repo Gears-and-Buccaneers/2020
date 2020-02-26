@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -108,11 +109,15 @@ public class RobotContainer {
     );
 
     m_intake.setDefaultCommand(
+      //new RunCommand(m_intake.runWithAnalog(m_driverController.getTriggerAxis(Hand.kRight))));
       new SequentialCommandGroup(
-        // new InstantCommand(m_intake::retract, m_intake),
+        //new InstantCommand(m_intake::retract, m_intake),
         new InstantCommand(m_intake::stopRunning, m_intake)
-        )
-    );
+        ));
+      //new RunCommand(
+        
+      //)
+    
 
 
     // Add commands to the autonomous command chooser
