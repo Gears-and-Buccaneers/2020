@@ -75,6 +75,13 @@ public class Storage extends SubsystemBase {
     return numBalls;
   }
 
+  /**
+   * @param numBalls the numBalls to set
+   */
+  public void setNumBalls(int numBalls) {
+    this.numBalls = numBalls;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

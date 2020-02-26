@@ -7,46 +7,43 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Storage;
-
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IndexBalls extends CommandBase {
-  private static Storage m_storage;
+import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Intake;
 
-  private double startTime;
+public class ClearBalls extends CommandBase {
+  private static Storage m_storage = new Storage();
+  private static Intake m_intake = new Intake();
+  
+  /**
+   * Creates a new ClearBalls.
+   */
+  public ClearBalls(Storage storage, Intake intake) {
+    m_intake = intake;
+    m_storage = storage;
 
-  public IndexBalls(Storage subsystem) {
-    m_storage = subsystem;
-    addRequirements(m_storage);
+    addRequirements(m_intake, m_storage);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
+    m_intake.open();
+    m_intake.reverse();
+    m_storage.reverse();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_storage.isPresentOnEntry()){
-      while(startTime - Timer.getFPGATimestamp() < 1){
-        m_storage.run();
-      }
-      startTime = Timer.getFPGATimestamp();
-    }
-    else{
-      m_storage.stop();
-      startTime = Timer.getFPGATimestamp();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.retract();
+    m_intake.stopRunning();
     m_storage.stop();
   }
 

@@ -53,7 +53,9 @@ public class Shooter extends SubsystemBase {
 		m_ShooterMaster.config_kF(ShooterConstants.kPIDLoopIdx, ShooterConstants.kF, ShooterConstants.kTimeoutMs);
 		m_ShooterMaster.config_kP(ShooterConstants.kPIDLoopIdx, ShooterConstants.kP, ShooterConstants.kTimeoutMs);
 		m_ShooterMaster.config_kI(ShooterConstants.kPIDLoopIdx, ShooterConstants.kI, ShooterConstants.kTimeoutMs);
-		m_ShooterMaster.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
+    m_ShooterMaster.config_kD(ShooterConstants.kPIDLoopIdx, ShooterConstants.kD, ShooterConstants.kTimeoutMs);
+    
+    m_ShooterMaster.set(ControlMode.PercentOutput, 0);
   }
 
   @Override

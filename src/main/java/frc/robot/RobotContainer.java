@@ -34,7 +34,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Storage;
-//import frc.robot.subsystems.WheelSpinner;
+import frc.robot.subsystems.WheelSpinner;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
@@ -61,7 +61,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Storage m_storage = new Storage();
   private final Climber m_climber = new Climber();
-  // private final WheelSpinner m_spinner = new WheelSpinner();
+  private final WheelSpinner m_spinner = new WheelSpinner();
 
   private final Limelight m_limelight = new Limelight();
 
@@ -87,31 +87,25 @@ public class RobotContainer {
         new RunCommand(() -> m_drivetrain
             .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
+
     //make the bumpers control the bar side to side motors.
-    // m_climber.setDefaultCommand(
-    //   new RunCommand(
-    //         () -> m_climber
-    //     .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
-    // ));
+    m_climber.setDefaultCommand(
+      new RunCommand(
+            () -> m_climber
+        .driveOnBar(m_driverController.getRawAxis(3), m_driverController.getRawAxis(4))
+    ));
 
 
-    // m_limelight.setDefaultCommand(
-    //   new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
-    // );
+    m_limelight.setDefaultCommand(
+      new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
+    );
 
     m_storage.setDefaultCommand(
-      new RunCommand(m_storage::stop, m_storage)
+      new IndexBalls(m_storage)
     );
 
-    m_shooter.setDefaultCommand(
-      new RunCommand(m_shooter::stopShooter, m_shooter)
-    );
-
-    m_intake.setDefaultCommand(
-      new SequentialCommandGroup(
-        // new InstantCommand(m_intake::retract, m_intake),
-        new InstantCommand(m_intake::stopRunning, m_intake)
-        )
+    m_spinner.setDefaultCommand(
+      new RunCommand(m_spinner::getColor, m_spinner)
     );
 
 
@@ -141,37 +135,50 @@ public class RobotContainer {
       )
     );
 
+    // bring intake in when button is released
     new JoystickButton(m_driverController, Button.kA.value).whenReleased(
-      new InstantCommand(m_intake::retract, m_intake)
+      new InstantCommand(m_intake::stopRunning, m_intake).andThen(
+      new InstantCommand(m_intake::retract, m_intake))
     );
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
-      new SequentialCommandGroup(
-          new RunCommand(m_shooter::runOpenLoop, m_shooter)
-          //new ExhaustBalls(m_storage, m_shooter)
-      )
+          new ExhaustBalls(m_storage, m_shooter)
     );
 
+    //push balls away while the right bumper is held
+    new JoystickButton(m_driverController, Button.kBumperRight.value)
+      .whileHeld(new SequentialCommandGroup(
+          new InstantCommand(m_intake::open, m_intake),
+          new InstantCommand(m_intake::reverse, m_intake)
+    ));
+
+    // bring intake in when button is released
+    new JoystickButton(m_driverController, Button.kBumperRight.value).whenReleased(
+      new InstantCommand(m_intake::stopRunning, m_intake).andThen(
+      new InstantCommand(m_intake::retract, m_intake))
+    );
+
+
+    //play music while back is held :)
     new JoystickButton(m_driverController, Button.kBack.value).whileHeld(new RunCommand(m_drivetrain::playMusic, m_drivetrain));
 
-
-
-    // //open wheel spinner and run while 'B' is HELD
-    // new JoystickButton(m_driverController, Button.kB.value).whileHeld(
-    //     new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
-    // );
+    //open wheel spinner and run while 'B' is HELD
+    new JoystickButton(m_driverController, Button.kB.value).whileHeld(
+        new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
+    );
 
     //extend climber when left bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
       new InstantCommand(m_climber::extendClimber, m_climber));
 
-
+    //upper dpad button for transport testing. runs transport when pressed
     new POVButton(m_driverController, 0).whenPressed(
       new RunCommand(m_storage::run, m_storage)
     );
 
-    new POVButton(m_driverController, 180).whenPressed(
+    //stops transport when released
+    new POVButton(m_driverController, 0).whenReleased(
       new InstantCommand(m_storage::stop, m_storage)
     );
   }

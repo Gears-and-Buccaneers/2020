@@ -29,6 +29,8 @@ public class ExhaustBalls extends CommandBase {
   @Override
   public void initialize() {
     timeInitial = Timer.getFPGATimestamp();
+
+    m_shooter.runOpenLoop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,9 +43,6 @@ public class ExhaustBalls extends CommandBase {
         }
         m_storage.stop();
         timeInitial = Timer.getFPGATimestamp();
-        while(Timer.getFPGATimestamp() - timeInitial < 0.3){
-          m_storage.stop();  
-        }
       }  
     }
     else {
@@ -54,6 +53,8 @@ public class ExhaustBalls extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_shooter.stopShooter();
+    m_storage.stop();
   }
 
   // Returns true when the command should end.
