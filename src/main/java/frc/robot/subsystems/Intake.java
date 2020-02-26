@@ -42,6 +42,10 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("thing", num);
   }
 
+  public void reverse(){
+    m_intakeMotor.set(ControlMode.PercentOutput, -0.5);
+  }
+
   public void open(){
     m_intakeSol.set(Value.kForward);
   }

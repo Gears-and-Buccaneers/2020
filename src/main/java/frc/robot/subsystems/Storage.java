@@ -42,6 +42,10 @@ public class Storage extends SubsystemBase {
     topMotor.set(ControlMode.PercentOutput, 0);
   }
 
+  public void reverse(){
+    topMotor.set(ControlMode.PercentOutput, -1);
+  }
+
   public void countBalls(){
     isPresentOnEntry();
     isPresentOnExit();
