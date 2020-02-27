@@ -34,6 +34,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDStrip;
 import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.WheelSpinner;
 import frc.robot.subsystems.Shooter;
@@ -57,7 +58,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  public final Drivetrain m_drivetrain = new Drivetrain();
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Storage m_storage = new Storage();
@@ -65,6 +66,8 @@ public class RobotContainer {
   private final WheelSpinner m_spinner = new WheelSpinner();
 
   private final Limelight m_limelight = new Limelight();
+
+  private final LEDStrip m_ledStrip = new LEDStrip();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -123,6 +126,9 @@ public class RobotContainer {
         
       //)
     
+    m_ledStrip.setDefaultCommand(
+      new RunCommand(m_ledStrip::setColor, m_ledStrip)
+    );
 
 
     // Add commands to the autonomous command chooser
@@ -141,9 +147,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Pop intake out when the 'A' button is HELD.
-    new JoystickButton(m_driverController, Button.kA.value)
-      .whileHeld(new SequentialCommandGroup(
+    // Pop intake out when the 'A' button is pressed.
+    new JoystickButton(m_driverController, Button.kBumperRight.value)
+      .whenPressed( new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
           new InstantCommand(m_intake::runNow, m_intake)
           // new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
@@ -152,7 +158,7 @@ public class RobotContainer {
     );
 
     // bring intake in when button is released
-    new JoystickButton(m_driverController, Button.kA.value).whenReleased(
+    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenPressed(
       new InstantCommand(m_intake::stopRunning, m_intake).andThen(
       new InstantCommand(m_intake::retract, m_intake))
     );
@@ -163,19 +169,12 @@ public class RobotContainer {
           //new ExhaustBalls(m_storage, m_shooter)
     );
 
-    //push balls away while the right bumper is held
-    new JoystickButton(m_driverController, Button.kBumperRight.value)
-      .whileHeld(new SequentialCommandGroup(
+    //push balls away while the left stick is pressed
+    new JoystickButton(m_driverController, Button.kStickLeft.value)
+      .whenPressed(new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
           new InstantCommand(m_intake::reverse, m_intake)
     ));
-
-    // bring intake in when button is released
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenReleased(
-      new InstantCommand(m_intake::stopRunning, m_intake).andThen(
-      new InstantCommand(m_intake::retract, m_intake))
-    );
-
 
     //play music while back is held :)
     new JoystickButton(m_driverController, Button.kBack.value).whileHeld(new RunCommand(m_drivetrain::playMusic, m_drivetrain));
@@ -185,8 +184,8 @@ public class RobotContainer {
         new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
     );
 
-    //extend climber when left bumper is pressed
-    new JoystickButton(m_driverController, Button.kBumperLeft.value).whileHeld(
+    //extend climber when start is pressed
+    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(
       new InstantCommand(m_climber::extendClimber, m_climber));
 
     //upper dpad button for transport testing. runs transport when pressed

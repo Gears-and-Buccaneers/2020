@@ -54,6 +54,7 @@ public class AlignWithVision extends CommandBase {
     DRIVE_K = SmartDashboard.getNumber("Driving KP", 0.0);
     MAX_DRIVE = SmartDashboard.getNumber("Max Speed", 0.0);
 
+    m_limelight.setVisionMode(1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -71,6 +72,7 @@ public class AlignWithVision extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.arcadeDrive(0, 0);
+    m_limelight.setVisionMode(0);
   }
 
   // Returns true when the command should end.

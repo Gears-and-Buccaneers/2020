@@ -56,7 +56,7 @@ public class Limelight extends SubsystemBase {
     return tv.getBoolean(false);
   }
 
-  public static void setVisionMode(int visionMode){
+  public void setVisionMode(int visionMode){
     m_table.getEntry("pipeline").setNumber(visionMode); //sets which vision pipeline we are using (should only be one)
   }
 

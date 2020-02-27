@@ -165,6 +165,10 @@ public class Drivetrain extends SubsystemBase {
     rightSensors.setIntegratedSensorPosition(0,0);
   }
 
+  public void calibrateGyro(){
+    m_gyro.calibrate();
+  }
+
   public void resetAllSensors() {
     leftSensors.setIntegratedSensorPosition(0,0); //resets encoders and doesn't check if it's done properly
     rightSensors.setIntegratedSensorPosition(0,0);
