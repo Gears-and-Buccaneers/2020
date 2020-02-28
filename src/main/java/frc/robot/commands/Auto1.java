@@ -7,28 +7,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-
-import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Storage;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Auto1 extends SequentialCommandGroup {
+  
   /**
    * Creates a new Auto1.
    */
-  public Auto1(Drivetrain driveSubsystem) {
+  public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage) {
     addCommands(
-        // Drive backwards off of the initiation line and shoot the balls
-        new StartEndCommand(
-            // Start driving forward at the start of the command
-            () -> driveSubsystem.arcadeDrive(-AutoConstants.kAutoDriveSpeed, 0),
-            // Stop driving at the end of the command
-            () -> driveSubsystem.arcadeDrive(0, 0), driveSubsystem)
-            // Reset the encoders before starting
-            .beforeStarting(driveSubsystem::resetEncoders)
-            // End the command when the robot's driven distance exceeds the desired value
-            .withInterrupt(() -> driveSubsystem.getAverageEncoderDistance()
-                >= AutoConstants.kAutoDriveDistanceInches));
+      new DriveStraight(drivetrain, 5), 
+      parallel(
+        new RunCommand(shooter::runOpenLoop, shooter),
+        new ExhaustBalls(storage, shooter)
+      ).withTimeout(10)
+    );
   }
 }

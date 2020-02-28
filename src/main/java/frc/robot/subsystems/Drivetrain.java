@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
@@ -236,12 +237,26 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDriveCTRE(double forward, double turn){
-    leftMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, +(turn*turn));
-		rightMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, -(turn*turn));
+    leftMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, +turn);
+		rightMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, -turn);
   }
 
   public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){
 
+  }
+
+  public boolean getMotionMagicFinished(){
+    if ((leftMaster.getClosedLoopError() < +Constants.DriveConstants.kErrThreshold && leftMaster.getClosedLoopError() > -Constants.DriveConstants.kErrThreshold)
+    &&(rightMaster.getClosedLoopError() < +Constants.DriveConstants.kErrThreshold && rightMaster.getClosedLoopError() > -Constants.DriveConstants.kErrThreshold)){
+      return true;
+    }
+
+    return false;
+  }
+
+  public void stop(){
+    leftMaster.set(ControlMode.PercentOutput, 0);
+    rightMaster.set(ControlMode.PercentOutput, 0);
   }
 
   public void driveStraightMotionMagic(double rotations, double target_turn){

@@ -61,7 +61,7 @@ public final class Constants {
          * Drive the robot in counter clockwise rotations and measure the units per rotation.
          * Take the average of the two.
          */
-        public final static int kEncoderUnitsPerRotation = 51711;
+        public final static int kEncoderUnitsPerRotation = 21935;
 
         /**
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
@@ -94,6 +94,8 @@ public final class Constants {
 
         public static final double kTrackwidthMeters = 0.69;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
+
+        public static final int kErrThreshold = 10; //the sensor units within the acceptable threshold for finishing the closed loop operation
 
         // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
         // These characterization values MUST be determined either experimentally or theoretically
