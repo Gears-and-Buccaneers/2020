@@ -95,10 +95,10 @@ public class RobotContainer {
     //   new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
     // );
 
-    m_storage.setDefaultCommand(
-      new IndexBalls(m_storage)
-      //new RunCommand(m_storage::stop, m_storage)
-    );
+    // m_storage.setDefaultCommand(
+    //   new IndexBalls(m_storage)
+    //   //new RunCommand(m_storage::stop, m_storage)
+    // );
 
     m_shooter.setDefaultCommand(
       new RunCommand(m_shooter::stopShooter, m_shooter)
@@ -138,20 +138,20 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Pop intake out when the 'A' button is pressed.
+    // Pop intake out when the right bumper is pressed.
     new JoystickButton(m_driverController, Button.kBumperRight.value)
       .whenPressed( new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
-          new InstantCommand(m_intake::runNow, m_intake)
-          // new InstantCommand(m_storage::run, m_storage)//.withTimeout(0.5),
-          //new IndexBalls(m_storage)
+          new InstantCommand(m_intake::runNow, m_intake),
+          new IndexBalls(m_storage)
       )
     );
 
     // bring intake in when button is released
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenPressed(
       new InstantCommand(m_intake::stopRunning, m_intake).andThen(
-      new InstantCommand(m_intake::retract, m_intake))
+      new InstantCommand(m_intake::retract, m_intake),
+      new InstantCommand(m_storage::stop, m_storage))
     );
 
     //shoot balls while the x is held

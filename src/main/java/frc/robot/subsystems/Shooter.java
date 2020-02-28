@@ -71,6 +71,7 @@ public class Shooter extends SubsystemBase {
 
   public void runOpenLoop(){
     m_ShooterMaster.set(ControlMode.PercentOutput, 1);
+    SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
   }
 
   public void stopShooter(){

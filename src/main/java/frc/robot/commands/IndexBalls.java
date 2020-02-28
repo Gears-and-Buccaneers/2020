@@ -11,6 +11,8 @@ import frc.robot.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class IndexBalls extends CommandBase {
@@ -40,12 +42,15 @@ public class IndexBalls extends CommandBase {
         }
         numBalls++;
         startTime = Timer.getFPGATimestamp();
+        SmartDashboard.putNumber("number of balls in storage", numBalls);
       }
       else{
         while(Timer.getFPGATimestamp() - startTime < 0.05){
           m_storage.run();
         }
+        startTime = Timer.getFPGATimestamp();
         m_storage.stop();
+        SmartDashboard.putNumber("number of balls in storage", numBalls);
       }
     }
     else{
