@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +29,10 @@ public class Storage extends SubsystemBase {
     topMotor.configFactoryDefault();
     bottomMotor.configFactoryDefault();
 
-    topMotor.setInverted(true);
+    topMotor.setNeutralMode(NeutralMode.Brake);
+    bottomMotor.setNeutralMode(NeutralMode.Brake);
+
+    topMotor.setInverted(false);
 
     bottomMotor.setInverted(true);
     bottomMotor.follow(topMotor);
@@ -62,8 +66,8 @@ public class Storage extends SubsystemBase {
   }
 
   public boolean isPresentOnExit(){
-    if(exitSensor.getVoltage() > BallStorageConstants.minRecognizeVoltage){
-      SmartDashboard.putNumber("number of balls in storage", numBalls--);
+    if(exitSensor.getVoltage() <= BallStorageConstants.minRecognizeVoltage){
+      //SmartDashboard.putNumber("number of balls in storage", numBalls);
       return true;
     }
     else{

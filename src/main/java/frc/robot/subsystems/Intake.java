@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
 
     m_intakeMotor.setNeutralMode(NeutralMode.Brake);
 
-    m_intakeMotor.setInverted(true);
+    m_intakeMotor.setInverted(false);
 
     m_intakeSol.set(Value.kReverse);
 

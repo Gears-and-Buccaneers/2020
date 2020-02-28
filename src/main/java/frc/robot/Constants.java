@@ -120,8 +120,8 @@ public final class Constants {
       }
 
       public static final class ClimberConstants {
-        public static final int kClimberWinch = 61;
-        public static final int kClimberHook = 10;
+        public static final int kClimberWinch = 30;
+        public static final int kClimberHook = 20;
         public static final int kClimberElevator = 7;
 
         public static final int kExtendTimeInSeconds = 2;
@@ -130,7 +130,7 @@ public final class Constants {
       }
 
       public static final class ShooterConstants {
-        public static final int kShooterMaster = 20; //CAN IDs for shooter SRXs
+        public static final int kShooterMaster = 31; //CAN IDs for shooter SRXs
         public static final int kShooterSlave = 60;
 
         //PID Velocity Loop Control constants
@@ -161,7 +161,7 @@ public final class Constants {
       }
 
       public static final class BallStorageConstants {
-        public static final int kStorageMotorMaster = 30;
+        public static final int kStorageMotorMaster = 10;
         public static final int kStorageMotorSlave = 40;
         
         public static final int entranceSensor = 0;
@@ -178,7 +178,7 @@ public final class Constants {
       }
 
       public static final class WheelSpinnerConstants {
-        public static final int kWheelSpinnerMotor  = 69;
+        public static final int kWheelSpinnerMotor  = 21;
 
         public static final double wheelSpinnerMotorSpeed = 0.7;
 

@@ -55,7 +55,7 @@ public class RobotContainer {
 
   private final Limelight m_limelight = new Limelight();
 
-  private final LEDStrip m_ledStrip = new LEDStrip();
+  //private final LEDStrip m_ledStrip = new LEDStrip();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -71,8 +71,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    Auto1 m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
-    Auto2 m_auto2 = new Auto2(m_drivetrain);
+    //Auto1 m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
+    //Auto2 m_auto2 = new Auto2(m_drivetrain);
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -80,7 +80,7 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
-            .arcadeDriveCTRE(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
+            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
                          DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
@@ -96,8 +96,8 @@ public class RobotContainer {
     // );
 
     m_storage.setDefaultCommand(
-      //new IndexBalls(m_storage)
-      new RunCommand(m_storage::stop, m_storage)
+      new IndexBalls(m_storage)
+      //new RunCommand(m_storage::stop, m_storage)
     );
 
     m_shooter.setDefaultCommand(
@@ -107,24 +107,24 @@ public class RobotContainer {
     m_spinner.setDefaultCommand(
       new RunCommand(m_spinner::getColor, m_spinner)
     );
-    m_intake.setDefaultCommand(
-      //new RunCommand(m_intake.runWithAnalog(m_driverController.getTriggerAxis(Hand.kRight))));
-      new SequentialCommandGroup(
-        //new InstantCommand(m_intake::retract, m_intake),
-        new InstantCommand(m_intake::stopRunning, m_intake)
-        ));
-      //new RunCommand(
+    // m_intake.setDefaultCommand(
+    //   //new RunCommand(m_intake.runWithAnalog(m_driverController.getTriggerAxis(Hand.kRight))));
+    //   new SequentialCommandGroup(
+    //     //new InstantCommand(m_intake::retract, m_intake),
+    //     new InstantCommand(m_intake::stopRunning, m_intake)
+    //     ));
+    //   //new RunCommand(
         
-      //)
+    //   //)s
     
-    m_ledStrip.setDefaultCommand(
-      new RunCommand(m_ledStrip::setColor, m_ledStrip)
-    );
+    // m_ledStrip.setDefaultCommand(
+    //   new RunCommand(m_ledStrip::setColor, m_ledStrip)
+    // );
 
 
     // Add commands to the autonomous command chooser
-    m_chooser.addOption("simple auto", m_auto1);
-    m_chooser.addOption("auto using ramsetecommand", m_auto2);
+    //m_chooser.addOption("simple auto", m_auto1);
+    //m_chooser.addOption("auto using ramsetecommand", m_auto2);
 
     // Put the chooser on the dashboard
     Shuffleboard.getTab("Autonomous").add(m_chooser);
@@ -164,7 +164,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStickLeft.value)
       .whenPressed(new SequentialCommandGroup(
           new InstantCommand(m_intake::open, m_intake),
-          new InstantCommand(m_intake::reverse, m_intake)
+          new InstantCommand(m_intake::reverse, m_intake),
+          new InstantCommand(m_storage::reverse, m_storage)
     ));
 
     //play music while back is held :)
@@ -198,6 +199,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
+    //return new Auto1(m_drivetrain);
   }
 
 }

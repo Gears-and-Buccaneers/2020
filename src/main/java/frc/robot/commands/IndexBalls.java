@@ -17,6 +17,7 @@ public class IndexBalls extends CommandBase {
   private static Storage m_storage;
 
   private double startTime;
+  private int numBalls;
 
   public IndexBalls(Storage subsystem) {
     m_storage = subsystem;
@@ -33,10 +34,19 @@ public class IndexBalls extends CommandBase {
   @Override
   public void execute() {
     if(m_storage.isPresentOnEntry()){
-      while(startTime - Timer.getFPGATimestamp() < 1){
-        m_storage.run();
+      if(numBalls < 2){
+        while(Timer.getFPGATimestamp() - startTime < 0.05){
+          m_storage.run();
+        }
+        numBalls++;
+        startTime = Timer.getFPGATimestamp();
       }
-      startTime = Timer.getFPGATimestamp();
+      else{
+        while(Timer.getFPGATimestamp() - startTime < 0.05){
+          m_storage.run();
+        }
+        m_storage.stop();
+      }
     }
     else{
       m_storage.stop();

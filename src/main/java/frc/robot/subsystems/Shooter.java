@@ -28,11 +28,13 @@ public class Shooter extends SubsystemBase {
     m_ShooterSlave.configFactoryDefault(ShooterConstants.kTimeoutMs);
 
     //makes sure that the motors coast and do not brake so it causes less stress on the motors because it is a shooter
-    m_ShooterMaster.setNeutralMode(NeutralMode.Coast);
-    m_ShooterSlave.setNeutralMode(NeutralMode.Coast);
+    m_ShooterMaster.setNeutralMode(NeutralMode.Brake);
+    m_ShooterSlave.setNeutralMode(NeutralMode.Brake);
+
+    m_ShooterMaster.setInverted(true);
 
     //make one side (non-encoder motor) slave and reverse it
-    m_ShooterSlave.setInverted(true);
+    m_ShooterSlave.setInverted(false);
     m_ShooterSlave.follow(m_ShooterMaster);
 
     //set the sensor for the master shooter to be the mag encoder
