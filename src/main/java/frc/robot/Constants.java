@@ -26,6 +26,8 @@ public final class Constants {
         public static final int kRightMaster = 2;
         public static final int kRightSlave = 3;
 
+        public static final int kTimeoutMs = 30; //to make sure config works
+
         public static final boolean kGyroReversed = true;
 
         public static final int kVoltageCompLevel = 10; //Lowest Voltage Motors should get to in Volts from PDB
@@ -41,6 +43,55 @@ public final class Constants {
 
         public static final double kRampCoefficient = 0.1; //Time in seconds from 0% to 100%
 
+        /**
+         * Motor neutral dead-band, set to the minimum 0.1%.
+         */
+        public static final double kNeutralDeadband = 0.001;
+
+        /**
+         * How many sensor units per rotation.
+         * Using Falcon Integrated Sensor.
+         * @link https://github.com/CrossTheRoadElec/Phoenix-Documentation#what-are-the-units-of-my-sensor
+         */
+        public final static int kSensorUnitsPerRotation = 2048;
+
+        /**
+         * Empirically measure what the difference between encoders per 360' TODO: need to do this <<-
+         * Drive the robot in clockwise rotations and measure the units per rotation.
+         * Drive the robot in counter clockwise rotations and measure the units per rotation.
+         * Take the average of the two.
+         */
+        public final static int kEncoderUnitsPerRotation = 51711;
+
+        /**
+         * PID Gains may have to be adjusted based on the responsiveness of control loop.
+           * kF: 1023 represents output value to Talon at 100%, 6800 represents Velocity units at 100% output
+           * Not all set of Gains are used in this project and may be removed as desired.
+           * 
+         * 	                                    			  kP   kI   kD   kF               Iz    PeakOut */
+        public final static Gains kGains_Distanc = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
+        public final static Gains kGains_Turning = new Gains( 0.2, 0.0,  0.0, 0.0,            200,  1.00 );
+        public final static Gains kGains_Velocit = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.50 );
+        public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+
+        /** ---- Flat constants, you should not need to change these ---- */
+        /* We allow either a 0 or 1 when selecting an ordinal for remote devices [You can have up to 2 devices assigned remotely to a talon/victor] */
+        public final static int REMOTE_0 = 0;
+        public final static int REMOTE_1 = 1;
+        /* We allow either a 0 or 1 when selecting a PID Index, where 0 is primary and 1 is auxiliary */
+        public final static int PID_PRIMARY = 0;
+        public final static int PID_TURN = 1;
+        /* Firmware currently supports slots [0, 3] and can be used for either PID Set */
+        public final static int SLOT_0 = 0;
+        public final static int SLOT_1 = 1;
+        public final static int SLOT_2 = 2;
+        public final static int SLOT_3 = 3;
+        /* ---- Named slots, used to clarify code ---- */
+        public final static int kSlot_Distanc = SLOT_0;
+        public final static int kSlot_Turning = SLOT_1;
+        public final static int kSlot_Velocit = SLOT_2;
+        public final static int kSlot_MotProf = SLOT_3;
+
         public static final double kTrackwidthMeters = 0.69;
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
@@ -55,6 +106,7 @@ public final class Constants {
 
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;
+
       }
     
       public static final class IntakeConstants {
