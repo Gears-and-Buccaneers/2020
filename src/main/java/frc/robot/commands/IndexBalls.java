@@ -30,6 +30,7 @@ public class IndexBalls extends CommandBase {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
+    numBalls = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

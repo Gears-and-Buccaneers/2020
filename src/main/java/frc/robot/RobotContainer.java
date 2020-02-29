@@ -80,8 +80,8 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
-            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getY(GenericHID.Hand.kLeft),
-                         DriveConstants.kTurnCoefficient * m_driverController.getX(GenericHID.Hand.kRight)), m_drivetrain));
+            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(1),
+                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(4)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
     // m_climber.setDefaultCommand(
@@ -95,10 +95,10 @@ public class RobotContainer {
     //   new RunCommand(() -> m_limelight.update(true)) //makes the limelight update to the smartdashboard constantly
     // );
 
-    // m_storage.setDefaultCommand(
-    //   new IndexBalls(m_storage)
-    //   //new RunCommand(m_storage::stop, m_storage)
-    // );
+    m_storage.setDefaultCommand(
+      new IndexBalls(m_storage)
+      //new RunCommand(m_storage::stop, m_storage)
+    );
 
     m_shooter.setDefaultCommand(
       new RunCommand(m_shooter::stopShooter, m_shooter)
