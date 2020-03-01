@@ -37,13 +37,14 @@ public class ExhaustBalls extends CommandBase {
   @Override
   public void execute() {
     if(m_shooter.isShooterAtSpeed()){
-      for(int i = m_storage.getNumBalls(); i > 0; i--){
-        while(Timer.getFPGATimestamp() - timeInitial < 0.3){
-          m_storage.run();  
-        }
-        m_storage.stop();
-        timeInitial = Timer.getFPGATimestamp();
-      }  
+      // for(int i = m_storage.getNumBalls(); i > 0; i--){
+      //   while(Timer.getFPGATimestamp() - timeInitial < 0.3){
+      //     m_storage.run();  
+      //   }
+      //   m_storage.stop();
+      //   timeInitial = Timer.getFPGATimestamp();
+      // }  
+      m_storage.run();
     }
     else {
       m_storage.stop();

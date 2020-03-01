@@ -73,6 +73,25 @@ public class Shooter extends SubsystemBase {
     m_ShooterMaster.set(ControlMode.Velocity, ShooterConstants.targetVelocity_UnitsPer100ms);
   }
 
+  public void decreaseShooterSpeed(){
+    if(SmartDashboard.getNumber("shooter speed", 1)<=0.8){
+      SmartDashboard.putNumber("shooter speed", 0.8);
+    }
+    else{
+      SmartDashboard.putNumber("shooter speed", pspeed -= 0.05);
+    }
+
+  }
+
+  public void increaseShooterSpeed(){
+    if(SmartDashboard.getNumber("shooter speed", 1)>1){
+      SmartDashboard.putNumber("shooter speed", 1);
+    }
+    else {
+      SmartDashboard.putNumber("shooter speed", pspeed += 0.05);
+    }
+  }
+
   public void runOpenLoop(){
     m_ShooterMaster.set(ControlMode.PercentOutput, SmartDashboard.getNumber("shooter speed", 1));
     SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -60,6 +61,10 @@ public class RobotContainer {
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  //the sendable auto routines to chose from
+  private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
+  private final CommandBase m_auto2 = new Auto2(m_drivetrain);
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     
@@ -71,17 +76,14 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    //Auto1 m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
-    //Auto2 m_auto2 = new Auto2(m_drivetrain);
-
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_drivetrain.setDefaultCommand(
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
-            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(1),
-                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(4)), m_drivetrain));
+            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(4),
+                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(1)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
     // m_climber.setDefaultCommand(
@@ -107,15 +109,6 @@ public class RobotContainer {
     m_spinner.setDefaultCommand(
       new RunCommand(m_spinner::getColor, m_spinner)
     );
-    // m_intake.setDefaultCommand(
-    //   //new RunCommand(m_intake.runWithAnalog(m_driverController.getTriggerAxis(Hand.kRight))));
-    //   new SequentialCommandGroup(
-    //     //new InstantCommand(m_intake::retract, m_intake),
-    //     new InstantCommand(m_intake::stopRunning, m_intake)
-    //     ));
-    //   //new RunCommand(
-        
-    //   //)s
     
     // m_ledStrip.setDefaultCommand(
     //   new RunCommand(m_ledStrip::setColor, m_ledStrip)
@@ -123,8 +116,8 @@ public class RobotContainer {
 
 
     // Add commands to the autonomous command chooser
-    //m_chooser.addOption("simple auto", m_auto1);
-    //m_chooser.addOption("auto using ramsetecommand", m_auto2);
+    m_chooser.addOption("simple auto", m_auto1);
+    m_chooser.addOption("auto using ramsetecommand", m_auto2);
 
     // Put the chooser on the dashboard
     Shuffleboard.getTab("Autonomous").add(m_chooser);
@@ -199,7 +192,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
-    //return new Auto1(m_drivetrain);
   }
 
 }
