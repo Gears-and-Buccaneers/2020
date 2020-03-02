@@ -66,6 +66,7 @@ public class RobotContainer {
   private final CommandBase m_auto2 = new Auto2(m_drivetrain);
 
   private double[] blue = new double[]{0,0,255};
+  private double[] white = new double[]{100,100,100};
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -103,20 +104,10 @@ public class RobotContainer {
       new IndexBalls(m_storage)
       //new RunCommand(m_storage::stop, m_storage)
     );
-
-    m_shooter.setDefaultCommand(
-      new RunCommand(m_shooter::stopShooter, m_shooter).andThen(
-      new InstantCommand(() -> m_limelight.setVisionMode(0)))
-    );
-
+    
     m_spinner.setDefaultCommand(
       new RunCommand(m_spinner::getColor, m_spinner)
     );
-    
-    m_ledStrip.setDefaultCommand(
-      new RunCommand(m_ledStrip::setColor, m_ledStrip)
-    );
-
 
     // Add commands to the autonomous command chooser
     m_chooser.addOption("simple auto", m_auto1);
@@ -158,6 +149,14 @@ public class RobotContainer {
             //new ExhaustBalls(m_storage, m_shooter)
     );
 
+    //stop shooting when x is released
+    new JoystickButton(m_driverController, Button.kX.value).whenReleased(
+          new InstantCommand(m_shooter::stopShooter, m_shooter).andThen(
+            new InstantCommand(() -> m_ledStrip.setColor(white)),
+            new InstantCommand(() -> m_limelight.setVisionMode(0)),
+            new InstantCommand(m_storage::stop, m_storage))
+    );
+
     //push balls away while the left stick is pressed
     new JoystickButton(m_driverController, Button.kStickLeft.value)
       .whenPressed(new SequentialCommandGroup(
@@ -188,8 +187,19 @@ public class RobotContainer {
       new InstantCommand(m_storage::stop, m_storage)
     );
 
-    new POVButton(m_driverController , 180).whenPressed(
+    //stops intake but keeps it down
+    new POVButton(m_driverController , 270).whenPressed(
       new InstantCommand(m_intake::stopRunning, m_intake)
+    );
+
+    //increases shooter speed
+    new POVButton(m_driverController, 0).whenPressed(
+      new InstantCommand(m_shooter::increaseShooterSpeed, m_shooter)
+    );
+
+    //decreases shooter speed
+    new POVButton(m_driverController, 180).whenPressed(
+      new InstantCommand(m_shooter::decreaseShooterSpeed, m_shooter)
     );
   }
 

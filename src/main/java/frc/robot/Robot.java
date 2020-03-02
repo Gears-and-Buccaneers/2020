@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   private PowerDistributionPanel PDP;
 
   private double[] black = new double[]{0,0,0};
+  private double[] red = new double[]{255,0,0};
+  private double[] orange = new double[]{224,66,0};
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -89,6 +91,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    m_robotContainer.m_ledStrip.setColor(orange);
   }
 
   /**
@@ -107,6 +110,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.m_ledStrip.setColor(red);
   }
 
   /**

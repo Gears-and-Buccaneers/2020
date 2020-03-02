@@ -28,7 +28,7 @@ public class Limelight extends SubsystemBase {
    * Creates a new Limelight.
    */
   public Limelight() {
-
+    setVisionMode(0);
   }
 
   @Override
