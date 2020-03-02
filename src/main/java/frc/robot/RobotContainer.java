@@ -85,8 +85,8 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
-            .arcadeDriveCTRE(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(4),
-                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(1)), m_drivetrain));
+            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(1),
+                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(4)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
     // m_climber.setDefaultCommand(

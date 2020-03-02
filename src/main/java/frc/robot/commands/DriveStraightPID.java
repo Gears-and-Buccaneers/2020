@@ -25,7 +25,7 @@ public class DriveStraightPID extends PIDCommand {
   public DriveStraightPID(double distance, Drivetrain drivetrain) {
     super(
         // The controller that the command will use
-        new PIDController(4, 0, 0),
+        new PIDController(0.5, 0, 0),
         drivetrain::getAverageEncoderDistance,
         distance,
         d -> drivetrain.drive(d, d));
