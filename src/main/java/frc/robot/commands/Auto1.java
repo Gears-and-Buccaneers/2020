@@ -10,7 +10,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Auto1 extends SequentialCommandGroup {
@@ -20,8 +20,8 @@ public class Auto1 extends SequentialCommandGroup {
    */
   public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage) {
     addCommands(
-      new DriveStraight(drivetrain, 5), 
-      new RunCommand(shooter::runOpenLoop, shooter),
+      new DriveStraightPID(5, drivetrain),
+      new InstantCommand(shooter::runOpenLoop, shooter),
       new ExhaustBalls(storage, shooter).withTimeout(10)
     );
   }

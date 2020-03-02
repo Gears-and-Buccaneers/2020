@@ -232,10 +232,16 @@ public class Drivetrain extends SubsystemBase {
 
     m_drive.setSafetyEnabled(false);
 
+    m_drive.setRightSideInverted(false);
+
   }
 
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot, true); // Squaring values
+  }
+
+  public void drive(double left, double right) {
+    m_drive.tankDrive(left, right);
   }
 
   public void arcadeDriveCTRE(double forward, double turn){
