@@ -20,7 +20,7 @@ public class Auto1 extends SequentialCommandGroup {
    */
   public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage) {
     addCommands(
-      new DriveStraightPID(5, drivetrain),
+      new DriveStraightPID(2048, drivetrain),
       new InstantCommand(shooter::runOpenLoop, shooter),
       new ExhaustBalls(storage, shooter).withTimeout(10)
     );

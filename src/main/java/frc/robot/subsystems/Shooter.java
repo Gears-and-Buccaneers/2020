@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("flywheel speed in rpm", m_ShooterMaster.getSelectedSensorVelocity()); //TODO: convert to RPM
+    SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
   }
 
   public void runShooterPID(){
@@ -94,7 +94,7 @@ public class Shooter extends SubsystemBase {
 
   public void runOpenLoop(){
     m_ShooterMaster.set(ControlMode.PercentOutput, SmartDashboard.getNumber("shooter speed", 1));
-    SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
+    //SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
   }
 
   public void stopShooter(){
@@ -102,6 +102,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isShooterAtSpeed(){
-    return (m_ShooterMaster.getSelectedSensorVelocity() > 4000);
+    return ((m_ShooterMaster.getSelectedSensorVelocity()/4096) > 4000);
   }
 }
