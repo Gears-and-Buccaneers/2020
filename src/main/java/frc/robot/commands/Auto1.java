@@ -21,10 +21,8 @@ public class Auto1 extends SequentialCommandGroup {
   public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage) {
     addCommands(
       new DriveStraight(drivetrain, 5), 
-      parallel(
-        new RunCommand(shooter::runOpenLoop, shooter),
-        new ExhaustBalls(storage, shooter)
-      ).withTimeout(10)
+      new RunCommand(shooter::runOpenLoop, shooter),
+      new ExhaustBalls(storage, shooter).withTimeout(10)
     );
   }
 }

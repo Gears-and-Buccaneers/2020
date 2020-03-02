@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
 
   private PowerDistributionPanel PDP;
 
+  private double[] black = new double[]{0,0,0};
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -73,6 +75,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    m_robotContainer.m_ledStrip.setColor(black);
   }
 
   /**

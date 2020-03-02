@@ -27,7 +27,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 public class Auto2 extends CommandBase {
-  private static Drivetrain m_drivetrain  = new Drivetrain();
+  private static Drivetrain m_drivetrain;
   
   /**
    * Creates a new Auto2.

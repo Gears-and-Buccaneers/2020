@@ -230,6 +230,8 @@ public class Drivetrain extends SubsystemBase {
 
     orchestra.loadMusic("cleanup.chrp");
 
+    m_drive.setSafetyEnabled(false);
+
   }
 
   public void arcadeDrive(double fwd, double rot) {
@@ -238,7 +240,8 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDriveCTRE(double forward, double turn){
     leftMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, +turn);
-		rightMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, -turn);
+    rightMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, -turn);
+    m_drive.feed();
   }
 
   public void arcadeDriveWithFeedforwardPID(double fwdSetpoint, double rotSetpoint){

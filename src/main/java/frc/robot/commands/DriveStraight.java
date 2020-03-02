@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveStraight extends CommandBase {
-  private static Drivetrain m_drivetrain = new Drivetrain();
+  private Drivetrain m_drivetrain;
   private double distance;
   
   /**

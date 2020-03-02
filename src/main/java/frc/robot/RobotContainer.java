@@ -56,7 +56,7 @@ public class RobotContainer {
 
   private final Limelight m_limelight = new Limelight();
 
-  //private final LEDStrip m_ledStrip = new LEDStrip();
+  public final LEDStrip m_ledStrip = new LEDStrip();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -64,6 +64,8 @@ public class RobotContainer {
   //the sendable auto routines to chose from
   private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
   private final CommandBase m_auto2 = new Auto2(m_drivetrain);
+
+  private double[] blue = new double[]{0,0,255};
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -82,7 +84,7 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
-            .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(4),
+            .arcadeDriveCTRE(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(4),
                          DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(1)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
@@ -103,16 +105,17 @@ public class RobotContainer {
     );
 
     m_shooter.setDefaultCommand(
-      new RunCommand(m_shooter::stopShooter, m_shooter)
+      new RunCommand(m_shooter::stopShooter, m_shooter).andThen(
+      new InstantCommand(() -> m_limelight.setVisionMode(0)))
     );
 
     m_spinner.setDefaultCommand(
       new RunCommand(m_spinner::getColor, m_spinner)
     );
     
-    // m_ledStrip.setDefaultCommand(
-    //   new RunCommand(m_ledStrip::setColor, m_ledStrip)
-    // );
+    m_ledStrip.setDefaultCommand(
+      new RunCommand(m_ledStrip::setColor, m_ledStrip)
+    );
 
 
     // Add commands to the autonomous command chooser
@@ -149,8 +152,10 @@ public class RobotContainer {
 
     //shoot balls while the x is held
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
-          new InstantCommand(m_shooter::runOpenLoop, m_shooter)
-          //new ExhaustBalls(m_storage, m_shooter)
+          new InstantCommand(m_shooter::runOpenLoop, m_shooter).andThen(
+            new InstantCommand(() -> m_ledStrip.setColor(blue)),
+            new InstantCommand(() -> m_limelight.setVisionMode(1)))
+            //new ExhaustBalls(m_storage, m_shooter)
     );
 
     //push balls away while the left stick is pressed
@@ -174,13 +179,17 @@ public class RobotContainer {
       new InstantCommand(m_climber::extendClimber, m_climber));
 
     //upper dpad button for transport testing. runs transport when pressed
-    new POVButton(m_driverController, 0).whenPressed(
+    new POVButton(m_driverController, 90).whenPressed(
       new RunCommand(m_storage::run, m_storage)
     );
 
     //stops transport when released
-    new POVButton(m_driverController, 0).whenReleased(
+    new POVButton(m_driverController, 90).whenReleased(
       new InstantCommand(m_storage::stop, m_storage)
+    );
+
+    new POVButton(m_driverController , 180).whenPressed(
+      new InstantCommand(m_intake::stopRunning, m_intake)
     );
   }
 

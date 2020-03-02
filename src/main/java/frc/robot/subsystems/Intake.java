@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void runNow(){
-    m_intakeMotor.set(ControlMode.PercentOutput, 0.65);
+    m_intakeMotor.set(ControlMode.PercentOutput, 0.45);
   }
 
   public void runWithAnalog(double num){

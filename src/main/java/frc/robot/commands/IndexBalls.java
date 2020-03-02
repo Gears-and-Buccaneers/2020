@@ -20,6 +20,7 @@ public class IndexBalls extends CommandBase {
 
   private double startTime;
   private int numBalls;
+  private boolean isBallOnSensor;
 
   public IndexBalls(Storage subsystem) {
     m_storage = subsystem;
@@ -30,7 +31,8 @@ public class IndexBalls extends CommandBase {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    numBalls = 0;
+    numBalls = m_storage.getNumBalls();
+    isBallOnSensor = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,20 +43,27 @@ public class IndexBalls extends CommandBase {
         while(Timer.getFPGATimestamp() - startTime < 0.05){
           m_storage.run();
         }
-        numBalls++;
+        //m_storage.setNumBalls(numBalls++); 
         startTime = Timer.getFPGATimestamp();
+        if(isBallOnSensor == false){
+          m_storage.setNumBalls(numBalls++);
+          isBallOnSensor = true;
+        }
         SmartDashboard.putNumber("number of balls in storage", numBalls);
       }
       else{
         while(Timer.getFPGATimestamp() - startTime < 0.05){
           m_storage.run();
         }
-        startTime = Timer.getFPGATimestamp();
+        //startTime = Timer.getFPGATimestamp();
         m_storage.stop();
-        SmartDashboard.putNumber("number of balls in storage", numBalls);
+        SmartDashboard.putNumber("number of balls in storage", numBalls++);
+        m_storage.setNumBalls(numBalls);
       }
     }
+    // m_storage.setNumBalls(numBalls++); 
     else{
+      isBallOnSensor = false;
       m_storage.stop();
       startTime = Timer.getFPGATimestamp();
     }
