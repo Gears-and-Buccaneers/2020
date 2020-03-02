@@ -245,8 +245,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDriveCTRE(double forward, double turn){
-    leftMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, +turn);
-    rightMaster.set(TalonFXControlMode.PercentOutput, -(forward*forward), DemandType.ArbitraryFeedForward, -turn);
+    leftMaster.set(TalonFXControlMode.PercentOutput, -(forward), DemandType.ArbitraryFeedForward, +turn);
+    rightMaster.set(TalonFXControlMode.PercentOutput, -(forward), DemandType.ArbitraryFeedForward, -turn);
     m_drive.feed();
   }
 
