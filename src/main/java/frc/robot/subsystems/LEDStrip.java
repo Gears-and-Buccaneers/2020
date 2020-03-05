@@ -9,14 +9,17 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.CANifier.LEDChannel;
+import com.ctre.phoenix.CANifier.PWMChannel;
 
 import frc.robot.Constants.CANIfierConstants;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDStrip extends SubsystemBase {
   private final CANifier canifier = new CANifier(CANIfierConstants.kCanifier1);
-  
+
+  double[] _dutyCycleAndPeriods = new double[]{0, 0};
+
   /**
    * Creates a new LEDStrip.
    */
@@ -27,7 +30,8 @@ public class LEDStrip extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    canifier.getPWMInput(PWMChannel.PWMChannel0, _dutyCycleAndPeriods);
+	  SmartDashboard.putNumber("lidar distance", _dutyCycleAndPeriods[1]);
   }
 
   /**

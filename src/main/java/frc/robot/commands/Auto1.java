@@ -11,18 +11,21 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class Auto1 extends SequentialCommandGroup {
   
   /**
    * Creates a new Auto1.
    */
-  public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage) {
+  public Auto1(Drivetrain drivetrain, Shooter shooter, Storage storage, double distance) {
     addCommands(
-      new DriveStraightPID(2048, drivetrain),
+      new DriveStraight(drivetrain, 1),
       new InstantCommand(shooter::runOpenLoop, shooter),
-      new ExhaustBalls(storage, shooter).withTimeout(10)
+      new WaitUntilCommand(shooter::isShooterAtSpeed),
+      new RunCommand(storage::run, storage)
     );
   }
 }

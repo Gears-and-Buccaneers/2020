@@ -19,7 +19,7 @@ public class IndexBalls extends CommandBase {
   private static Storage m_storage;
 
   private double startTime;
-  private int numBalls;
+  private int numBalls = 0;
   private boolean isBallOnSensor;
 
   public IndexBalls(Storage subsystem) {
@@ -31,7 +31,7 @@ public class IndexBalls extends CommandBase {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    numBalls = m_storage.getNumBalls();
+    //numBalls = m_storage.getNumBalls();
     isBallOnSensor = false;
   }
 
@@ -39,17 +39,20 @@ public class IndexBalls extends CommandBase {
   @Override
   public void execute() {
     if(m_storage.isPresentOnEntry()){
-      if(numBalls < 2){
+      if(m_storage.isPresentOnExit()){
+        m_storage.stop();
+      }
+      else if(numBalls < 2){
         while(Timer.getFPGATimestamp() - startTime < 0.05){
           m_storage.run();
         }
         //m_storage.setNumBalls(numBalls++); 
         startTime = Timer.getFPGATimestamp();
-        if(isBallOnSensor == false){
-          m_storage.setNumBalls(numBalls++);
-          isBallOnSensor = true;
-        }
-        SmartDashboard.putNumber("number of balls in storage", numBalls);
+        // if(isBallOnSensor == false){
+        //   //m_storage.setNumBalls(numBalls++);
+        //   isBallOnSensor = true;
+        // }
+        // SmartDashboard.putNumber("number of balls in storage", numBalls);
       }
       else{
         while(Timer.getFPGATimestamp() - startTime < 0.05){
@@ -57,13 +60,13 @@ public class IndexBalls extends CommandBase {
         }
         //startTime = Timer.getFPGATimestamp();
         m_storage.stop();
-        SmartDashboard.putNumber("number of balls in storage", numBalls++);
-        m_storage.setNumBalls(numBalls);
+        //SmartDashboard.putNumber("number of balls in storage", numBalls++);
+        //m_storage.setNumBalls(numBalls);
       }
     }
     // m_storage.setNumBalls(numBalls++); 
     else{
-      isBallOnSensor = false;
+      //isBallOnSensor = false;
       m_storage.stop();
       startTime = Timer.getFPGATimestamp();
     }

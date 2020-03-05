@@ -11,7 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class DriveStraight extends CommandBase {
+public class DriveStraight2 extends CommandBase {
   private Drivetrain m_drivetrain;
   private double distance;
   private double timeinit;
@@ -19,7 +19,7 @@ public class DriveStraight extends CommandBase {
   /**
    * Creates a new DriveStraight.
    */
-  public DriveStraight(Drivetrain drivetrain, double distanceInput) {
+  public DriveStraight2(Drivetrain drivetrain, double distanceInput) {
     m_drivetrain = drivetrain;
     distance = distanceInput;
     addRequirements(m_drivetrain);
@@ -34,8 +34,8 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    while(Timer.getFPGATimestamp()-timeinit < 2){
-      m_drivetrain.drive(0.54, 0.5);
+    while(Timer.getFPGATimestamp()-timeinit < 1.2){
+      m_drivetrain.drive(-0.5, -0.544);
     }
     m_drivetrain.drive(0, 0);
     System.out.println("finished drive auton");

@@ -28,9 +28,10 @@ import frc.robot.subsystems.WheelSpinner;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Limelight;
-
+import frc.robot.commands.AlignWithVision;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
+import frc.robot.commands.AutoPID;
 import frc.robot.commands.IndexBalls;
 import frc.robot.commands.ExhaustBalls;
 import frc.robot.commands.Stage1Spin;
@@ -62,8 +63,9 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   //the sendable auto routines to chose from
-  private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage);
+  private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage, 4096);
   private final CommandBase m_auto2 = new Auto2(m_drivetrain);
+
 
   private double[] blue = new double[]{0,0,255};
   private double[] white = new double[]{100,100,100};
@@ -105,13 +107,13 @@ public class RobotContainer {
       //new RunCommand(m_storage::stop, m_storage)
     );
     
-    m_spinner.setDefaultCommand(
-      new RunCommand(m_spinner::getColor, m_spinner)
-    );
+    // m_spinner.setDefaultCommand(
+    //   new RunCommand(m_spinner::getColor, m_spinner)
+    // );
 
     // Add commands to the autonomous command chooser
-    m_chooser.addOption("simple auto", m_auto1);
-    m_chooser.addOption("auto using ramsetecommand", m_auto2);
+    m_chooser.addOption("backwards and shoot", m_auto1);
+    m_chooser.addOption("forwards off line", m_auto2);
 
     // Put the chooser on the dashboard
     Shuffleboard.getTab("Autonomous").add(m_chooser);
@@ -145,8 +147,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(
           new InstantCommand(m_shooter::runOpenLoop, m_shooter).andThen(
             new InstantCommand(() -> m_ledStrip.setColor(blue)),
-            new InstantCommand(() -> m_limelight.setVisionMode(1)))
-            //new ExhaustBalls(m_storage, m_shooter)
+            new InstantCommand(() -> m_limelight.setVisionMode(1)),
+            new AlignWithVision(m_drivetrain, m_limelight))
+            //new ExhaustBalls(m_storage, m_shooter)v
     );
 
     //stop shooting when x is released
@@ -170,13 +173,46 @@ public class RobotContainer {
 
     //open wheel spinner and run while 'B' is HELD
     new JoystickButton(m_driverController, Button.kB.value).whileHeld(
-        new RunCommand(m_spinner::extend, m_spinner).withTimeout(3).andThen(new Stage1Spin(m_spinner))
+        new RunCommand(m_spinner::retract, m_spinner)
     );
+
+    new JoystickButton(m_driverController, Button.kB.value).whenReleased(
+        new InstantCommand(m_spinner::extend, m_spinner).andThen(
+        new InstantCommand(m_spinner::run, m_spinner))
+    );
+
+    new JoystickButton(m_driverController, Button.kB.value).whenReleased(
+        new InstantCommand(m_spinner::stop, m_spinner).andThen(
+        new InstantCommand(m_spinner::retract, m_spinner))
+    );
+    
 
     //extend climber when start is pressed
     new JoystickButton(m_driverController, Button.kStart.value).whileHeld(
-      new InstantCommand(m_climber::extendClimber, m_climber));
+      new InstantCommand(m_climber::extendClimber, m_climber)
+    );
 
+    new JoystickButton(m_driverController, Button.kStart.value).whenReleased(
+      new InstantCommand(m_climber::stop, m_climber)
+    );
+
+    new JoystickButton(m_driverController, Button.kStickRight.value).whenPressed(
+      new InstantCommand(m_climber::reverse, m_climber)
+    );
+    new JoystickButton(m_driverController, Button.kStickRight.value).whenReleased(
+      new InstantCommand(m_climber::stop, m_climber)
+    );
+
+    // new JoystickButton(m_driverController, Button.kStickRight.value).whileHeld(
+    //   new InstantCommand(m_spinner::extend, m_spinner).andThen(
+    //   new InstantCommand(m_spinner::run))
+    // );
+
+    // new JoystickButton(m_driverController, Button.kStickRight.value).whenReleased(
+    //   new InstantCommand(m_spinner::retract, m_spinner).andThen(
+    //   new InstantCommand(m_spinner::stop))
+    // );
+  
     //upper dpad button for transport testing. runs transport when pressed
     new POVButton(m_driverController, 90).whenPressed(
       new RunCommand(m_storage::run, m_storage)

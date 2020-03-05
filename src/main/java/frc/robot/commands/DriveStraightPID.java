@@ -9,6 +9,8 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
 
+import java.time.Period;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -31,7 +33,6 @@ public class DriveStraightPID extends PIDCommand {
         d -> drivetrain.drive(d, d));
         m_drivetrain = drivetrain;
         addRequirements(m_drivetrain);
-    SmartDashboard.putNumber("position error autonomous1", getController().getPositionError()); 
     getController().setTolerance(0.01);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -43,6 +44,12 @@ public class DriveStraightPID extends PIDCommand {
     // Get everything in a safe starting state.
     m_drivetrain.resetAllSensors();
     super.initialize();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    SmartDashboard.putNumber("pos err", getController().getPositionError());
   }
 
   // Returns true when the command should end.

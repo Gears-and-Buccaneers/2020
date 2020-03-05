@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
+    SmartDashboard.putNumber("shooter speed units per 100ms", (m_ShooterMaster.getSelectedSensorVelocity()));
   }
 
   public void runShooterPID(){
@@ -102,6 +102,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isShooterAtSpeed(){
-    return ((m_ShooterMaster.getSelectedSensorVelocity()/4096) > 4000);
+    return ((m_ShooterMaster.getSelectedSensorVelocity()) > 3800);
   }
 }

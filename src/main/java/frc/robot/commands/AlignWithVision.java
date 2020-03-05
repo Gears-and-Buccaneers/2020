@@ -15,7 +15,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.Constants.ShooterConstants;
 
 public class AlignWithVision extends CommandBase {
-  private static Drivetrain m_drivetrain = new Drivetrain();
+  private static Drivetrain m_drivetrain;
   private static Limelight m_limelight = new Limelight();
 
   private boolean m_LimelightHasValidTarget = false;
@@ -66,6 +66,8 @@ public class AlignWithVision extends CommandBase {
     else {
       m_drivetrain.arcadeDrive(0.0,0.0);
     }
+
+    SmartDashboard.putNumber("ta", m_limelight.getTA());
   }
 
   // Called once the command ends or is interrupted.
@@ -107,8 +109,8 @@ public class AlignWithVision extends CommandBase {
         m_LimelightSteerCommand = steer_cmd;
 
         // try to drive forward until the target area reaches our desired area
-        //double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
-        double drive_cmd = 0; //no driving, just turning
+        double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+        //double drive_cmd = 0; //no driving, just turning
 
         // don't let the robot drive too fast into the goal
         if (drive_cmd > MAX_DRIVE)

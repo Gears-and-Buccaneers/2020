@@ -51,6 +51,8 @@ public class WheelSpinner extends SubsystemBase {
     colorMatcher.addColorMatch(kYellowTarget);    
 
     wheelMotor.configFactoryDefault(); //reset any previous configs on wheel motor.
+
+    spinnerSol.set(Value.kForward);
   }
 
   public String getColor() {
@@ -82,11 +84,11 @@ public class WheelSpinner extends SubsystemBase {
   }
 
   public void extend() {
-    spinnerSol.set(Value.kForward); //extends the assembly
+    spinnerSol.set(Value.kReverse); //extends the assembly
   }
 
   public void retract() {
-    spinnerSol.set(Value.kReverse); //retracts the assembly
+    spinnerSol.set(Value.kForward); //retracts the assembly
   }
 
   @Override
