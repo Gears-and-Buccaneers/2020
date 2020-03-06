@@ -95,6 +95,8 @@ public class Drivetrain extends SubsystemBase {
   public static final double kRamseteB = 2;
   public static final double kRamseteZeta = 0.7;
 
+  private boolean swapDrive;
+
   public Drivetrain() {
     //reset talons to factory defaults just in case of a swap or a setting changed in phoenix tuner
     leftMaster.configFactoryDefault();
@@ -210,7 +212,7 @@ public class Drivetrain extends SubsystemBase {
 		rightMaster.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, Constants.DriveConstants.kTimeoutMs);
 		rightMaster.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 20, Constants.DriveConstants.kTimeoutMs);
 		rightMaster.setStatusFramePeriod(StatusFrame.Status_10_Targets, 20, Constants.DriveConstants.kTimeoutMs);
-		leftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.DriveConstants.kTimeoutMs);
+		leftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25, Constants.DriveConstants.kTimeoutMs);
 
 		rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 10);
     zeroSensors();
@@ -234,10 +236,18 @@ public class Drivetrain extends SubsystemBase {
 
     m_drive.setRightSideInverted(false);
 
+    swapDrive = false;
+    SmartDashboard.putBoolean("drive swapped?", swapDrive);
+
   }
 
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot+0.125, true); // Squaring values
+    if(swapDrive){
+      m_drive.arcadeDrive(-fwd, rot+0.125);
+    }
+    else{
+      m_drive.arcadeDrive(fwd, rot+0.125, true); // Squaring values
+    }
   }
 
   public void drive(double left, double right) {
@@ -347,6 +357,17 @@ public class Drivetrain extends SubsystemBase {
 
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
+  }
+
+  public void toggleSwap(){
+    if(swapDrive){
+      swapDrive = false;
+      SmartDashboard.putBoolean("drive swapped?", swapDrive);
+    }
+    else{
+      swapDrive = true;
+      SmartDashboard.putBoolean("drive swapped?", swapDrive);
+    }
   }
 
   /**

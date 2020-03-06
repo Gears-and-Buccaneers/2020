@@ -92,6 +92,10 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  public void setShooterSpeed(double speed){
+    pspeed = speed;
+  }
+
   public void runOpenLoop(){
     m_ShooterMaster.set(ControlMode.PercentOutput, SmartDashboard.getNumber("shooter speed", 1));
     //SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));

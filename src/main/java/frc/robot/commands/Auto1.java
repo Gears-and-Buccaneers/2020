@@ -13,6 +13,7 @@ import frc.robot.subsystems.Storage;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class Auto1 extends SequentialCommandGroup {
@@ -24,8 +25,13 @@ public class Auto1 extends SequentialCommandGroup {
     addCommands(
       new DriveStraight(drivetrain, 1),
       new InstantCommand(shooter::runOpenLoop, shooter),
+      new InstantCommand(() -> shooter.setShooterSpeed(0.90), shooter),
       new WaitUntilCommand(shooter::isShooterAtSpeed),
-      new RunCommand(storage::run, storage)
+      new WaitCommand(1.5),
+      new InstantCommand(storage::run, storage),
+      new WaitCommand(7),
+      new InstantCommand(shooter::stopShooter, shooter),
+      new InstantCommand(storage::stop, storage)
     );
   }
 }

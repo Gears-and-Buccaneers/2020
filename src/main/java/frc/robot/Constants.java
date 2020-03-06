@@ -30,7 +30,7 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final int kVoltageCompLevel = 10; //Lowest Voltage Motors should get to in Volts from PDB
+        public static final int kVoltageCompLevel = 7; //Lowest Voltage Motors should get to in Volts from PDB
 
         public static final int kEncoderCPR = 2048; //counts per revolution for enocder math
         public static final double kWheelDiameterInches = 6; //wheel diameter TODO: maybe convert to metric?
@@ -41,7 +41,7 @@ public final class Constants {
         public static final double kTurnCoefficient = 0.7; //Overall Scaling for Turning
         public static final double kDriveCoefficient = 1; //Overall Scaling for Forward/Reverse
 
-        public static final double kRampCoefficient = 0.18; //Time in seconds from 0% to 100%
+        public static final double kRampCoefficient = 0.09; //Time in seconds from 0% to 100%
 
         /**
          * Motor neutral dead-band, set to the minimum 0.1%.
@@ -120,8 +120,8 @@ public final class Constants {
       }
 
       public static final class ClimberConstants {
-        public static final int kClimberWinch = 30;
-        public static final int kClimberHook = 31;
+        public static final int kClimberWinch = 31;
+        public static final int kClimberHook = 30;
         public static final int kClimberElevator = 7;
 
         public static final int kExtendTimeInSeconds = 2;
@@ -154,10 +154,10 @@ public final class Constants {
 
         //constants for limelight vision
         // These numbers must be tuned for your Robot!  Be careful!
-        public static final double STEER_K = 0.5;                    // how hard to turn toward the target
+        public static final double STEER_K = 4;                    // how hard to turn toward the target
         public static final double DRIVE_K = 0.5;                    // how hard to drive fwd toward the target
         public static final double DESIRED_TARGET_AREA = 13.0;        // Area of the target when the robot reaches the wall
-        public static final double MAX_DRIVE = 0.8;                   // Simple speed limit so we don't drive too fast
+        public static final double MAX_DRIVE = 0.9;                   // Simple speed limit so we don't drive too fast
       }
 
       public static final class BallStorageConstants {

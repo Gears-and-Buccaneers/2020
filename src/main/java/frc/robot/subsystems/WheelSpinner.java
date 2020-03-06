@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Constants.WheelSpinnerConstants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -51,6 +52,8 @@ public class WheelSpinner extends SubsystemBase {
     colorMatcher.addColorMatch(kYellowTarget);    
 
     wheelMotor.configFactoryDefault(); //reset any previous configs on wheel motor.
+
+    wheelMotor.setNeutralMode(NeutralMode.Brake);
 
     spinnerSol.set(Value.kForward);
   }

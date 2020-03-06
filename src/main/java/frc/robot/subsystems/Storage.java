@@ -49,6 +49,10 @@ public class Storage extends SubsystemBase {
   public void reverse(){
     topMotor.set(ControlMode.PercentOutput, -1);
   }
+  public void reverse(double input){
+    topMotor.set(ControlMode.PercentOutput, -input);
+  }
+
 
   public void countBalls(){
     isPresentOnEntry();

@@ -66,6 +66,14 @@ public class Climber extends SubsystemBase {
     climberExtended = true;
   }
 
+  public void extendPiston(){
+    cliberSol.set(Value.kReverse);
+  }
+
+  public void retractPiston(){
+    cliberSol.set(Value.kForward);
+  }
+
   public void driveOnBar(double left, double right) {
     double leftInput = -left;
     double rightInput =  right;
@@ -73,9 +81,21 @@ public class Climber extends SubsystemBase {
     hookMotor.set(ControlMode.PercentOutput, output);
   }
 
+  public void winch(){
+    winchMotor.set(ControlMode.PercentOutput, -1);
+  }
+
+  public void stopWinch(){
+    winchMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void reverseWinch(){
+    winchMotor.set(ControlMode.PercentOutput, 0.3);
+  }
+
   public void stop(){
     elevatorMotor.set(ControlMode.PercentOutput, 0);
-    cliberSol.set(Value.kForward);
+    //cliberSol.set(Value.kForward);
   }
   public void reverse(){
     elevatorMotor.set(ControlMode.PercentOutput, -0.4);
