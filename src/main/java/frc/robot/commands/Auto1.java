@@ -42,7 +42,7 @@ public class Auto1 extends SequentialCommandGroup {
       new InstantCommand(shooter::stopShooter, shooter),
       new InstantCommand(storage::stop, storage),
       new InstantCommand(intake::stopRunning),
-      new DriveStraight(drivetrain, 1)
+      new DriveStraight(drivetrain, 2, true)
     );
   }
 }

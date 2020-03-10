@@ -40,6 +40,7 @@ public class IndexOrReverse extends CommandBase {
   public void execute() {
     if(triggerVal > 0){
       m_storage.reverse((triggerVal+1)/2);
+      m_intake.reverse((triggerVal+1)/2);
     }
     else{
       new IndexBalls(m_storage);

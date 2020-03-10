@@ -13,15 +13,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveStraight extends CommandBase {
   private Drivetrain m_drivetrain;
-  private double distance;
+  private double time;
   private double timeinit;
+  private boolean direction;
   
   /**
    * Creates a new DriveStraight.
    */
-  public DriveStraight(Drivetrain drivetrain, double distanceInput) {
+  public DriveStraight(Drivetrain drivetrain, double time, boolean direction) {
     m_drivetrain = drivetrain;
-    distance = distanceInput;
+    this.time = time;
+    this.direction = direction;
     addRequirements(m_drivetrain);
   }
 
@@ -34,18 +36,21 @@ public class DriveStraight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    while(Timer.getFPGATimestamp()-timeinit < 2){
-      m_drivetrain.drive(-0.5, -0.58);
+    while(Timer.getFPGATimestamp()-timeinit < time){
+      if(direction){
+        m_drivetrain.drive(-0.5, -0.544);
+      }
+      else{
+        m_drivetrain.drive(0.544, 0.5);
+      }
     }
     m_drivetrain.drive(0, 0);
-    System.out.println("finished drive auton");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_drivetrain.drive(0, 0);
-    System.out.println("finished drive auton in exec");
   }
 
   // Returns true when the command should end.

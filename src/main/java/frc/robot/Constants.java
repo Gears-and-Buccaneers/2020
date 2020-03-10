@@ -30,7 +30,7 @@ public final class Constants {
 
         public static final boolean kGyroReversed = true;
 
-        public static final int kVoltageCompLevel = 7; //Lowest Voltage Motors should get to in Volts from PDB
+        public static final int kVoltageCompLevel = 12; //voltage that controllers think is 100% output.
 
         public static final int kEncoderCPR = 2048; //counts per revolution for enocder math
         public static final double kWheelDiameterInches = 6; //wheel diameter TODO: maybe convert to metric?

@@ -20,7 +20,7 @@ public class Auto2 extends SequentialCommandGroup {
    */
   public Auto2(Drivetrain drivetrain) {
     addCommands(
-      new DriveStraight2(drivetrain, 1)
+      new DriveStraight(drivetrain, 2, false)
     );
   }
 }
