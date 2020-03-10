@@ -8,9 +8,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Storage;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Auto2 extends SequentialCommandGroup {
