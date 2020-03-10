@@ -35,7 +35,7 @@ public class DriveStraight extends CommandBase {
   @Override
   public void execute() {
     while(Timer.getFPGATimestamp()-timeinit < 2){
-      m_drivetrain.drive(0.54, 0.5);
+      m_drivetrain.drive(-0.5, -0.58);
     }
     m_drivetrain.drive(0, 0);
     System.out.println("finished drive auton");

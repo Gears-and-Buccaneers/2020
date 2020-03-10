@@ -56,7 +56,7 @@ public class IndexBalls extends CommandBase {
         // SmartDashboard.putNumber("number of balls in storage", numBalls);
       }
       else{
-        while(Timer.getFPGATimestamp() - startTime < 0.05){
+        while(Timer.getFPGATimestamp() - startTime < 0.1){
           m_storage.run();
         }
         //startTime = Timer.getFPGATimestamp();

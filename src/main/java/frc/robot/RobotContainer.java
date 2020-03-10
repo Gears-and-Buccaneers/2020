@@ -65,7 +65,7 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   //the sendable auto routines to chose from
-  private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage, 4096);
+  private final CommandBase m_auto1 = new Auto1(m_drivetrain, m_shooter, m_storage, m_intake, 4096);
   private final CommandBase m_auto2 = new Auto2(m_drivetrain);
 
 
@@ -91,7 +91,7 @@ public class RobotContainer {
         // hand, and turning controlled by the right.
         new RunCommand(() -> m_drivetrain
             .arcadeDrive(DriveConstants.kDriveCoefficient * m_driverController.getRawAxis(1),
-                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(4)), m_drivetrain));
+                         DriveConstants.kTurnCoefficient * m_driverController.getRawAxis(2)), m_drivetrain));
 
     //make the bumpers control the bar side to side motors.
     // m_climber.setDefaultCommand(
@@ -106,7 +106,7 @@ public class RobotContainer {
     // );
 
     m_storage.setDefaultCommand(
-      new IndexOrReverse(m_intake, m_storage, m_driverController.getRawAxis(4))
+      new IndexOrReverse(m_intake, m_storage, m_driverController.getRawAxis(3))
       //new RunCommand(m_storage::stop, m_storage)
     );
     
@@ -145,8 +145,8 @@ public class RobotContainer {
       new InstantCommand(m_storage::stop, m_storage))
     );
 
-    //feed balls while the x is held
-    new JoystickButton(m_driverController, Button.kX.value).whileHeld(
+    //feed balls while the x/sqare is held
+    new JoystickButton(m_driverController, 1).whileHeld(
           new InstantCommand(m_shooter::runOpenLoop, m_shooter).andThen(
             new InstantCommand(() -> m_ledStrip.setColor(blue)),
             new InstantCommand(m_shooter::runOpenLoop, m_shooter))
@@ -155,8 +155,8 @@ public class RobotContainer {
             //new ExhaustBalls(m_storage, m_shooter)v
     );
 
-    //stop feeding when x is released
-    new JoystickButton(m_driverController, Button.kX.value).whenReleased(
+    //stop feeding when x/square is released
+    new JoystickButton(m_driverController, 1).whenReleased(
           new InstantCommand(m_shooter::stopShooter, m_shooter).andThen(
             new InstantCommand(() -> m_ledStrip.setColor(white)),
             new InstantCommand(() -> m_limelight.setVisionMode(0)),
@@ -164,14 +164,13 @@ public class RobotContainer {
     );
 
     //push balls away while the left stick is pressed
-    new JoystickButton(m_driverController, Button.kStickLeft.value)
+    new JoystickButton(m_driverController, 11)
       .whenPressed(
         new ParallelCommandGroup(
-          new RunCommand(() -> m_intake.reverse(m_driverController.getRawAxis(2)), m_intake),
-          new RunCommand(() -> m_storage.reverse(m_driverController.getRawAxis(2)), m_storage)
+          new RunCommand(() -> m_intake.reverse((m_driverController.getRawAxis(3)+1)/2), m_intake),
+          new RunCommand(() -> m_storage.reverse((m_driverController.getRawAxis(3)+1)/2), m_storage)
         )
     );
-
     //play music while back is held :)
     // new JoystickButton(m_driverController, Button.kBack.value).whileHeld(new RunCommand(m_drivetrain::playMusic, m_drivetrain));
 
@@ -181,63 +180,63 @@ public class RobotContainer {
 
 
     //open wheel spinner and run while 'B' is HELD
-    new JoystickButton(m_driverController, Button.kB.value).whileHeld(
+    new JoystickButton(m_driverController, 14).whileHeld(
         new RunCommand(m_spinner::retract, m_spinner)
     );
 
-    new JoystickButton(m_driverController, Button.kB.value).whenReleased(
+    new JoystickButton(m_driverController, 14).whenReleased(
         new InstantCommand(m_spinner::extend, m_spinner).andThen(
         new InstantCommand(m_spinner::run, m_spinner))
     );
 
-    new JoystickButton(m_driverController, Button.kB.value).whenReleased(
+    new JoystickButton(m_driverController, 14).whenReleased(
         new InstantCommand(m_spinner::stop, m_spinner).andThen(
         new InstantCommand(m_spinner::retract, m_spinner))
     );
 
     //swap button for driving
-    new JoystickButton(m_driverController, Button.kY.value).whenPressed(
+    new JoystickButton(m_driverController, 4).whenPressed(
       new InstantCommand(() -> m_drivetrain.toggleSwap(), m_drivetrain)
     );
     
 
     //extend climber when start is pressed
-      new JoystickButton(m_driverController, Button.kStart.value).whileHeld(
+      new JoystickButton(m_driverController, 10).whileHeld(
         new InstantCommand(m_climber::extendClimber, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kStart.value).whenReleased(
+    new JoystickButton(m_driverController, 10).whenReleased(
       new InstantCommand(m_climber::stop, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kBack.value).whileHeld(
+    new JoystickButton(m_driverController, 9).whileHeld(
       new RunCommand(m_climber::reverseWinch, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kBack.value).whenReleased(
+    new JoystickButton(m_driverController, 9).whenReleased(
       new InstantCommand(m_climber::stopWinch, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kB.value).whenPressed(
+    new JoystickButton(m_driverController, 3).whenPressed(
       new InstantCommand(m_climber::extendPiston, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kStickRight.value).whenPressed(
+    new JoystickButton(m_driverController, 12).whenPressed(
       new SequentialCommandGroup(
         new InstantCommand(m_climber::retractPiston, m_climber),
         new InstantCommand(m_climber::reverse, m_climber)
       )
     );
-    new JoystickButton(m_driverController, Button.kStickRight.value).whenReleased(
+    new JoystickButton(m_driverController, 12).whenReleased(
       new InstantCommand(m_climber::stop, m_climber)
     );
 
-    new JoystickButton(m_driverController, Button.kA.value).whileHeld(
+    new JoystickButton(m_driverController, 2).whileHeld(
       new InstantCommand(m_spinner::extend, m_spinner).andThen(
       new InstantCommand(m_spinner::run))
     );
 
-    new JoystickButton(m_driverController, Button.kA.value).whenReleased(
+    new JoystickButton(m_driverController, 2).whenReleased(
       new InstantCommand(m_spinner::retract, m_spinner).andThen(
       new InstantCommand(m_spinner::stop))
     );

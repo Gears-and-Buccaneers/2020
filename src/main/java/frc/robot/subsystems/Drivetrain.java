@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -45,22 +46,25 @@ import frc.robot.Constants.DriveConstants;
 public class Drivetrain extends SubsystemBase {
   // left side motors
   private final WPI_TalonFX leftMaster = new WPI_TalonFX(DriveConstants.kLeftMaster);
-  private final TalonFX leftSlave = new TalonFX(DriveConstants.kLeftSlave);
+  private final WPI_TalonFX leftSlave = new WPI_TalonFX(DriveConstants.kLeftSlave);
 
   // right side motors
   private final WPI_TalonFX rightMaster = new WPI_TalonFX(DriveConstants.kRightMaster);
-  private final TalonFX rightSlave = new TalonFX(DriveConstants.kRightSlave);
+  private final WPI_TalonFX rightSlave = new WPI_TalonFX(DriveConstants.kRightSlave);
+
+  private final SpeedControllerGroup leftMotors = new SpeedControllerGroup(leftMaster, leftSlave);
+  private final SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightMaster, rightMaster);
 
   // Config Objects for motor controllers
-  private final TalonFXConfiguration leftMasterConfig = new TalonFXConfiguration();
-  private final TalonFXConfiguration rightMasterConfig = new TalonFXConfiguration();
+  //private final TalonFXConfiguration leftMasterConfig = new TalonFXConfiguration();
+  //private final TalonFXConfiguration rightMasterConfig = new TalonFXConfiguration();
 
   // Invert Directions for Left and Right
-	private final TalonFXInvertType leftInvert = TalonFXInvertType.CounterClockwise; //Same as invert = "false"
-	private final TalonFXInvertType rightInvert = TalonFXInvertType.Clockwise; //Same as invert = "true"
+	//private final TalonFXInvertType leftInvert = TalonFXInvertType.CounterClockwise; //Same as invert = "false"
+	//private final TalonFXInvertType rightInvert = TalonFXInvertType.Clockwise; //Same as invert = "true"
 
   // the drivebase
-  private final DifferentialDrive m_drive = new DifferentialDrive(leftMaster, rightMaster);
+  private final DifferentialDrive m_drive = new DifferentialDrive(leftMotors, rightMotors);
 
   //the gyro
   private final Gyro m_gyro = new ADIS16448_IMU();
@@ -129,54 +133,54 @@ public class Drivetrain extends SubsystemBase {
     /** Feedback Sensor Configuration */
 		
 		/* Configure the left Talon's selected sensor as local Integrated Sensor */
-		leftMasterConfig.primaryPID.selectedFeedbackSensor =	TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();	// Local Feedback Source
+		//leftMasterConfig.primaryPID.selectedFeedbackSensor =	TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();	// Local Feedback Source
 
     /* Configure the Remote Talon's selected sensor as a remote sensor for the right Talon */
-		rightMasterConfig.remoteFilter0.remoteSensorDeviceID = leftMaster.getDeviceID(); // Device ID of Source
-    rightMasterConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; // Remote Feedback Source
+		// rightMasterConfig.remoteFilter0.remoteSensorDeviceID = leftMaster.getDeviceID(); // Device ID of Source
+    // rightMasterConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; // Remote Feedback Source
 
-    /* Now that the Left sensor can be used by the master Talon,
-		 * set up the Left (Aux) and Right (Master) distance into a single
-		 * Robot distance as the Master's Selected Sensor 0. */
-    setRobotDistanceConfigs(rightInvert, rightMasterConfig);
+    // /* Now that the Left sensor can be used by the master Talon,
+		//  * set up the Left (Aux) and Right (Master) distance into a single
+		//  * Robot distance as the Master's Selected Sensor 0. */
+    // //setRobotDistanceConfigs(rightInvert, rightMasterConfig);
 
-    /* Setup difference signal to be used for turn when performing Drive Straight with encoders */
-    setRobotTurnConfigs(rightInvert, rightMasterConfig);
+    // /* Setup difference signal to be used for turn when performing Drive Straight with encoders */
+    // //setRobotTurnConfigs(rightInvert, rightMasterConfig);
     
-    /* Configure neutral deadband */
-		rightMasterConfig.neutralDeadband = Constants.DriveConstants.kNeutralDeadband;
-    leftMasterConfig.neutralDeadband = Constants.DriveConstants.kNeutralDeadband;
+    // /* Configure neutral deadband */
+		// rightMasterConfig.neutralDeadband = Constants.DriveConstants.kNeutralDeadband;
+    // leftMasterConfig.neutralDeadband = Constants.DriveConstants.kNeutralDeadband;
     
-    /* Motion Magic Configurations */
-		rightMasterConfig.motionAcceleration = 2000;
-		rightMasterConfig.motionCruiseVelocity = 2000;
+    // /* Motion Magic Configurations */
+		// rightMasterConfig.motionAcceleration = 2000;
+		// rightMasterConfig.motionCruiseVelocity = 2000;
 
-		/**
-		 * Max out the peak output (for all modes).  
-		 * However you can limit the output of a given PID object with configClosedLoopPeakOutput().
-		 */
-		leftMasterConfig.peakOutputForward = +1.0;
-		leftMasterConfig.peakOutputReverse = -1.0;
-		rightMasterConfig.peakOutputForward = +1.0;
-		rightMasterConfig.peakOutputReverse = -1.0;
+		// /**
+		//  * Max out the peak output (for all modes).  
+		//  * However you can limit the output of a given PID object with configClosedLoopPeakOutput().
+		//  */
+		// leftMasterConfig.peakOutputForward = +1.0;
+		// leftMasterConfig.peakOutputReverse = -1.0;
+		// rightMasterConfig.peakOutputForward = +1.0;
+		// rightMasterConfig.peakOutputReverse = -1.0;
 
-		/* FPID Gains for distance servo */
-		rightMasterConfig.slot0.kP = Constants.DriveConstants.kGains_Distanc.kP;
-		rightMasterConfig.slot0.kI = Constants.DriveConstants.kGains_Distanc.kI;
-		rightMasterConfig.slot0.kD = Constants.DriveConstants.kGains_Distanc.kD;
-		rightMasterConfig.slot0.kF = Constants.DriveConstants.kGains_Distanc.kF;
-		rightMasterConfig.slot0.integralZone = Constants.DriveConstants.kGains_Distanc.kIzone;
-		rightMasterConfig.slot0.closedLoopPeakOutput = Constants.DriveConstants.kGains_Distanc.kPeakOutput;
-		rightMasterConfig.slot0.allowableClosedloopError = 0;
+		// /* FPID Gains for distance servo */
+		// rightMasterConfig.slot0.kP = Constants.DriveConstants.kGains_Distanc.kP;
+		// rightMasterConfig.slot0.kI = Constants.DriveConstants.kGains_Distanc.kI;
+		// rightMasterConfig.slot0.kD = Constants.DriveConstants.kGains_Distanc.kD;
+		// rightMasterConfig.slot0.kF = Constants.DriveConstants.kGains_Distanc.kF;
+		// rightMasterConfig.slot0.integralZone = Constants.DriveConstants.kGains_Distanc.kIzone;
+		// rightMasterConfig.slot0.closedLoopPeakOutput = Constants.DriveConstants.kGains_Distanc.kPeakOutput;
+		// rightMasterConfig.slot0.allowableClosedloopError = 0;
 
-		/* FPID Gains for turn servo */
-		rightMasterConfig.slot1.kP = Constants.DriveConstants.kGains_Turning.kP;
-		rightMasterConfig.slot1.kI = Constants.DriveConstants.kGains_Turning.kI;
-		rightMasterConfig.slot1.kD = Constants.DriveConstants.kGains_Turning.kD;
-		rightMasterConfig.slot1.kF = Constants.DriveConstants.kGains_Turning.kF;
-		rightMasterConfig.slot1.integralZone = Constants.DriveConstants.kGains_Turning.kIzone;
-		rightMasterConfig.slot1.closedLoopPeakOutput = Constants.DriveConstants.kGains_Turning.kPeakOutput;
-		rightMasterConfig.slot1.allowableClosedloopError = 0;
+		// /* FPID Gains for turn servo */
+		// rightMasterConfig.slot1.kP = Constants.DriveConstants.kGains_Turning.kP;
+		// rightMasterConfig.slot1.kI = Constants.DriveConstants.kGains_Turning.kI;
+		// rightMasterConfig.slot1.kD = Constants.DriveConstants.kGains_Turning.kD;
+		// rightMasterConfig.slot1.kF = Constants.DriveConstants.kGains_Turning.kF;
+		// rightMasterConfig.slot1.integralZone = Constants.DriveConstants.kGains_Turning.kIzone;
+		// rightMasterConfig.slot1.closedLoopPeakOutput = Constants.DriveConstants.kGains_Turning.kPeakOutput;
+		// rightMasterConfig.slot1.allowableClosedloopError = 0;
 
 		/**
 		 * 1ms per loop.  PID loop can be slowed down if need be.
@@ -186,17 +190,19 @@ public class Drivetrain extends SubsystemBase {
 		 * - sensor movement is very slow causing the derivative error to be near zero.
 		 */
 		int closedLoopTimeMs = 1;
-		rightMasterConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
-		rightMasterConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
-		rightMasterConfig.slot2.closedLoopPeriod = closedLoopTimeMs;
-		rightMasterConfig.slot3.closedLoopPeriod = closedLoopTimeMs;
+		// rightMasterConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
+		// rightMasterConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
+		// rightMasterConfig.slot2.closedLoopPeriod = closedLoopTimeMs;
+		// rightMasterConfig.slot3.closedLoopPeriod = closedLoopTimeMs;
 
-		leftMaster.configAllSettings(leftMasterConfig);
-		rightMaster.configAllSettings(rightMasterConfig);
+		// leftMaster.configAllSettings(leftMasterConfig);
+		// rightMaster.configAllSettings(rightMasterConfig);
 		
 		/* Configure output and sensor direction */
-		leftMaster.setInverted(leftInvert);
-		rightMaster.setInverted(rightInvert);
+    leftMaster.setInverted(true);
+    leftSlave.setInverted(true);
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
 		/*
 		 * Talon FX does not need sensor phase set for its integrated sensor
 		 * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
@@ -208,17 +214,11 @@ public class Drivetrain extends SubsystemBase {
         // _rightMaster.setSensorPhase(true);
 		
 		/* Set status frame periods to ensure we don't have stale data */
-		rightMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 20, Constants.DriveConstants.kTimeoutMs);
-		rightMaster.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, Constants.DriveConstants.kTimeoutMs);
-		rightMaster.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 20, Constants.DriveConstants.kTimeoutMs);
-		rightMaster.setStatusFramePeriod(StatusFrame.Status_10_Targets, 20, Constants.DriveConstants.kTimeoutMs);
-		leftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 25, Constants.DriveConstants.kTimeoutMs);
-
-		rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_10_Targets, 10);
-    zeroSensors();
     
     rightMaster.setNeutralMode(NeutralMode.Brake);
+    rightSlave.setNeutralMode(NeutralMode.Brake);
     leftMaster.setNeutralMode(NeutralMode.Brake);
+    leftSlave.setNeutralMode(NeutralMode.Brake);
 
     instruments.add(leftMaster);
     instruments.add(leftSlave);
@@ -243,10 +243,10 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive(double fwd, double rot) {
     if(swapDrive){
-      m_drive.arcadeDrive(-fwd, rot+0.125);
+      m_drive.arcadeDrive(-fwd, (-1)*(rot-0));
     }
     else{
-      m_drive.arcadeDrive(fwd, rot+0.125, true); // Squaring values
+      m_drive.arcadeDrive(fwd, (-1)*(rot+0), true); // Squaring values
     }
   }
 

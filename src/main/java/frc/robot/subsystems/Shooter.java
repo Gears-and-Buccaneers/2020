@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
   private static final TalonSRX m_ShooterMaster = new TalonSRX(ShooterConstants.kShooterMaster);
   private static final TalonSRX m_ShooterSlave = new TalonSRX(ShooterConstants.kShooterSlave);
 
-  private double pspeed = 1;
+  private double pspeed = 0.85;
 
   public Shooter() {
     //reset talons to factory defaults just in case of a swap or a setting changed in phoenix tuner
@@ -74,8 +74,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void decreaseShooterSpeed(){
-    if(SmartDashboard.getNumber("shooter speed", 1)<=0.8){
-      SmartDashboard.putNumber("shooter speed", 0.8);
+    if(SmartDashboard.getNumber("shooter speed", 1)<=0.7){
+      SmartDashboard.putNumber("shooter speed", 0.7);
     }
     else{
       SmartDashboard.putNumber("shooter speed", pspeed -= 0.05);
@@ -97,7 +97,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runOpenLoop(){
-    m_ShooterMaster.set(ControlMode.PercentOutput, SmartDashboard.getNumber("shooter speed", 1));
+    m_ShooterMaster.set(ControlMode.PercentOutput, SmartDashboard.getNumber("shooter speed", 0.86));
     //SmartDashboard.putNumber("shooter speed in rpm", (m_ShooterMaster.getSelectedSensorVelocity()/4096));
   }
 
